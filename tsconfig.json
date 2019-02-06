@@ -1,0 +1,29 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": false, // TODO set to true later and fix errors it causes in build
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true, // for TypeORM
+    "experimentalDecorators": true, // for TypeORM
+    "sourceMap": true,
+    "lib": [ "es2017", "es6" ], // used for Object.entries
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "src/types/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

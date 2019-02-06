@@ -1,0 +1,25 @@
+{
+  "name": "radarsoft-core",
+  "version": "0.0.1",
+  "main": "src/app.ts",
+  "private": true,
+  "scripts": {
+    "build": "npm run build-ts && npm run tslint",
+    "watch-node": "nodemon dist/server.js",
+    "build-ts": "tsc || true",
+    "watch-ts": "rm -rf dist/ && tsc -w"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "dotenv": "^6.2.0",
+    "express": "~4.16.0",
+    "morgan": "~1.9.0"
+  },
+  "license": "GNU AGPLv3",
+  "devDependencies": {
+    "@types/node": "10.11.7",
+    "ts-node": "7.0.1",
+    "typescript": "3.1.3"
+  }
+}
