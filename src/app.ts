@@ -1,14 +1,30 @@
-const http = require('http')
+import dotenv from 'dotenv'
 
-const hostname = 'localhost'
-const port = 8080
+if(process.env.NODE_ENV === 'test'){
+    dotenv.config({ path: '.env.test'})
+} else {
+    dotenv.config({ path: '.env' })
+}
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'text/plain')
-    res.end('Hello World!\n')
-})
+import express from 'express'
+import cors from 'cors'
+// import bodyParser from 'body-parser'
+import { requestLogger, errorLogger } from './util/logging'
 
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-})
+const app = express()
+// app.use(bodyParser.json({ limit: '10240kb' }))
+
+if(process.env.USE_REQUEST_LOGGING) {
+    app.use(requestLogger)
+}
+
+app.set('port', process.env.PORT)
+app.use(cors())
+
+app.get('/', async (req, res) => res.send('Hello from Express.TS!'))
+
+if(process.env.USE_ERROR_LOGGING) {
+    app.use(errorLogger)
+}
+
+export default app
