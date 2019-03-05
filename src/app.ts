@@ -7,7 +7,6 @@ if(process.env.NODE_ENV === 'test'){
 }
 
 import express from 'express'
-import cors from 'cors'
 // import bodyParser from 'body-parser'
 import { requestLogger, errorLogger } from './util/logging'
 
@@ -19,9 +18,14 @@ if(process.env.USE_REQUEST_LOGGING) {
 }
 
 app.set('port', process.env.PORT)
-app.use(cors())
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
-app.get('/', async (req, res) => res.send('Hello from Express.TS!'))
+import { getGcData } from './controllers/geocaching-controller'
+app.get('/api/geocaching', getGcData)
 
 if(process.env.USE_ERROR_LOGGING) {
     app.use(errorLogger)
