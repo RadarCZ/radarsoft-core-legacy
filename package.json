@@ -7,7 +7,8 @@
     "build": "npm run build-ts && npm run tslint",
     "watch-node": "nodemon dist/server.js",
     "build-ts": "rm -rf dist/ && tsc || true",
-    "watch-ts": "rm -rf dist/ && tsc -w"
+    "watch-ts": "rm -rf dist/ && tsc -w",
+    "run": "nohup node dist/server.js &"
   },
   "dependencies": {
     "axios": "^0.18.0",

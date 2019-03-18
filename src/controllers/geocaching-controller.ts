@@ -3,7 +3,8 @@ import { parse } from 'node-html-parser'
 
 export const getGcData = async (req, res, next) => {
   const { u } = req.query
-  const gcData = await axios.get(`https://www.geocaching.com/p/default.aspx?u=${u}`)
+  const url = `https://www.geocaching.com/p/default.aspx?u=${u}`
+  const gcData = await axios.get(url)
 
   const gcHtml:any = parse(gcData.data)
   const stat1Text = gcHtml.querySelectorAll('.profile-stats')[0].querySelectorAll('li')[0].text.trim()
@@ -13,7 +14,8 @@ export const getGcData = async (req, res, next) => {
     name: gcHtml.querySelectorAll('h1')[0].text,
     site: 'geocaching',
     stat1: stat1Text.substr(0, stat1Text.indexOf(' ')),
-    stat2: stat2Text.substr(0, stat1Text.indexOf(' '))
+    stat2: stat2Text.substr(0, stat1Text.indexOf(' ')),
+    targetUrl: url
   }
 
   res.send(resultData)
