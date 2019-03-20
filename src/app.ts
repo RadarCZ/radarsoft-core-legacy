@@ -24,8 +24,11 @@ app.use(function (req, res, next) {
   next();
 });
 
-import { getGcData } from './controllers/geocaching-controller'
+import { getGcData } from './controllers/contacts/geocaching-controller'
 app.get('/api/geocaching', getGcData)
+
+import { getGhData } from './controllers/contacts/github-controller'
+app.get('/api/github', getGhData)
 
 if(process.env.USE_ERROR_LOGGING) {
     app.use(errorLogger)
