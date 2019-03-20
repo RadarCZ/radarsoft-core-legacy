@@ -7,11 +7,11 @@ if(process.env.NODE_ENV === 'test'){
 }
 
 import express from 'express'
-// import bodyParser from 'body-parser'
+import bodyParser from 'body-parser'
 import { requestLogger, errorLogger } from './util/logging'
 
 const app = express()
-// app.use(bodyParser.json({ limit: '10240kb' }))
+app.use(bodyParser.json({ limit: '10240kb' }))
 
 if(process.env.USE_REQUEST_LOGGING) {
     app.use(requestLogger)
