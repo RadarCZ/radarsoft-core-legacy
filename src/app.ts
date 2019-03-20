@@ -7,11 +7,11 @@ if(process.env.NODE_ENV === 'test'){
 }
 
 import express from 'express'
-// import bodyParser from 'body-parser'
+import bodyParser from 'body-parser'
 import { requestLogger, errorLogger } from './util/logging'
 
 const app = express()
-// app.use(bodyParser.json({ limit: '10240kb' }))
+app.use(bodyParser.json({ limit: '10240kb' }))
 
 if(process.env.USE_REQUEST_LOGGING) {
     app.use(requestLogger)
@@ -29,6 +29,9 @@ app.get('/api/geocaching', getGcData)
 
 import { getGhData } from './controllers/contacts/github-controller'
 app.get('/api/github', getGhData)
+
+import { processWebhook } from "./controllers/telegram/webhook-processor"
+app.post('/api/telegram/processUpdate', processWebhook)
 
 if(process.env.USE_ERROR_LOGGING) {
     app.use(errorLogger)
