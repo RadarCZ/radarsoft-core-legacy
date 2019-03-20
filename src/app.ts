@@ -30,6 +30,9 @@ app.get('/api/geocaching', getGcData)
 import { getGhData } from './controllers/contacts/github-controller'
 app.get('/api/github', getGhData)
 
+import { processWebhook } from "./controllers/telegram/webhook-processor"
+app.post('/api/telegram/processUpdate', processWebhook)
+
 if(process.env.USE_ERROR_LOGGING) {
     app.use(errorLogger)
 }
