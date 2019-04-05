@@ -5,7 +5,7 @@ import axios from 'axios'
 const server = app.listen(app.get('port'), () => {
   logger.info(`App is running at http://localhost:${app.get('port')} in ${app.get('env')} mode`)
 
-  axios.post(`https://api.telegram.org/${process.env.TG_BOT_TOKEN}/setWebhook`, {
+  axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/setWebhook`, {
     "url" : `https://radarsoft.cz/api/telegram/processUpdate?botToken=${process.env.TG_BOT_TOKEN}`,
     "allowed_updates" : ["message"]
   }).then((data) => {
