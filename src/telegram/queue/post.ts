@@ -12,11 +12,11 @@ export const postToChannel: (channelId: string, postFile: string, nextPostTime: 
     'chat_id': channelId,
   }
 
-  const queueFilePath = path.join(__dirname, 'queue', postFile)
-  const postedFilePath = path.join(__dirname, 'posted', postFile)
+  const queueFilePath = path.join(process.cwd(), 'data/telegram/queue', postFile)
+  const postedFilePath = path.join(process.cwd(), 'data/telegram/posted', postFile)
 
   if(fs.existsSync(queueFilePath)){
-    const rawData = fs.readFileSync(path.join(__dirname, 'queue', postFile), { encoding: 'utf8' })
+    const rawData = fs.readFileSync(queueFilePath, { encoding: 'utf8' })
     const { fullLink, artistLink, postLink } = JSON.parse(rawData)
     const sendType = path.extname(fullLink) === '.gif' ? 'Document' : 'Photo'
     data[sendType.toLowerCase()] = fullLink

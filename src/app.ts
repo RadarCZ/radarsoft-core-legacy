@@ -2,9 +2,9 @@ import dotenv from 'dotenv'
 import path from 'path'
 
 if(process.env.NODE_ENV === 'test'){
-    dotenv.config({ path: path.join(__dirname, '.env.test') })
+    dotenv.config({ path: path.join(process.cwd(), '.env.test') })
 } else {
-    dotenv.config({ path: path.join(__dirname, '.env') })
+    dotenv.config({ path: path.join(process.cwd(), '.env') })
 }
 
 import express from 'express'

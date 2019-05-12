@@ -6,7 +6,8 @@ import { postToChannel } from './post'
 import { logger } from "../../config/winston";
 
 export const handlePost: () => void = async () => {
-  const queueNextPostTimeFile = path.join(__dirname, 'queue/.data.json')
+  const queueNextPostTimeFile = path.join(process.cwd(), 'data/telegram/queue/.data.json')
+  const queueFolder = path.join(process.cwd(), 'data/telegram/queue')
   const currentTime = moment.utc()
   let lastPostTime: Moment = currentTime
 
@@ -19,9 +20,12 @@ export const handlePost: () => void = async () => {
   let nextPostMilliseconds: number = 0
 
   if (lastPostTime.isSameOrBefore(currentTime)) {
-    const files = fs.readdirSync(path.join(__dirname, 'queue'), {withFileTypes: true}).filter((fsEntry) => {
-      return (!fsEntry.name.startsWith('.') && fsEntry.isFile())
-    })
+    let files : fs.Dirent[] = []
+    if(fs.existsSync(queueFolder)){
+      files = fs.readdirSync(queueFolder, { withFileTypes: true }).filter((fsEntry) => {
+        return (!fsEntry.name.startsWith('.') && fsEntry.isFile())
+      })
+    }
 
     if (files.length < 1) {
       logger.info('Nothing to post, waiting 1 minute.')
