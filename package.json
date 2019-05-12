@@ -17,9 +17,11 @@
     "debug": "^4.1.1",
     "dotenv": "^7.0.0",
     "express": "~4.16.0",
+    "moment": "^2.24.0",
     "morgan": "~1.9.0",
     "node-html-parser": "^1.1.12",
     "nodemailer": "^6.0.0",
+    "seedrandom": "^3.0.1",
     "winston": "^3.2.1"
   },
   "license": "GNU AGPLv3",

@@ -1,8 +1,8 @@
 import { logger } from '../../config/winston'
-
-const url = require('url')
 import path from 'path'
 import fs from 'fs'
+
+const url = require('url')
 
 export const queue = async (req, res, next) => {
   const { fullLink, artistLink, postLink, origin } = req.data

@@ -1,9 +1,12 @@
 import app from './app'
 import { logger } from './config/winston'
 import axios from 'axios'
+import { handlePost } from "./telegram/queue";
 
 const server = app.listen(app.get('port'), () => {
   logger.info(`App is running at http://localhost:${app.get('port')} in ${app.get('env')} mode`)
+
+  handlePost()
 
   axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/setWebhook`, {
     "url" : `https://radarsoft.cz/api/telegram/processUpdate?botToken=${process.env.TG_BOT_TOKEN}`,
