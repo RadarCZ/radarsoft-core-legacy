@@ -42,8 +42,10 @@ export const handlePost: () => void = async () => {
     if (postResult === true) {
       logger.info(`Post successful; next post in ${newInterval} minutes.`)
     } else {
-      logger.info(`Post failed (error follows). Next post in ${newInterval} minutes.`)
-      logger.error(postResult as object)
+      logger.info(`Post failed${typeof postResult !== 'boolean' ? ' (error follows)' : ''}. Next post in ${newInterval} minutes.`)
+      if (typeof postResult !== 'boolean') {
+        logger.error(postResult as object)
+      }
     }
   } else {
     nextPostMilliseconds = lastPostTime.diff(currentTime)

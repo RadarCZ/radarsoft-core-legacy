@@ -35,6 +35,11 @@ export const postToChannel: (channelId: string, postFile: string, nextPostTime: 
         return Promise.resolve(true)
       }
     } catch(error) {
+      if (error.response.error_code >= 400 && error.response.error_code < 500) {
+        data['caption'] = `Post failed. Next at ${nextPostTime.format('LT (Z)')}.\n\n${postLink}`
+        await post(data, sendType)
+        return Promise.resolve(false)
+      }
       return Promise.resolve(error)
     }
   }
