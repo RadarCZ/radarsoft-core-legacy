@@ -47,6 +47,12 @@ export const handlePost: () => void = async () => {
         logger.error(postResult as object)
       }
     }
+
+    const writeData = {
+      nextPost: nextPostTime.format()
+    }  
+    fs.writeFileSync(queueNextPostTimeFile, writeData)
+    
   } else {
     nextPostMilliseconds = lastPostTime.diff(currentTime)
   }
