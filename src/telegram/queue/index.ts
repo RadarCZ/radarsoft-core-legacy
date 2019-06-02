@@ -37,7 +37,7 @@ export const handlePost: () => void = async () => {
     const fileIndex = Math.floor(Math.random() * filesCount)
     const newInterval: number = generateInterval()
     const nextPostTime: Moment = moment(currentTime).add(newInterval, 'm')
-    const postResult: boolean | Error = await postToChannel(`${process.env.TG_MAIN_CHANNEL_ID}`, files[fileIndex].name, nextPostTime)
+    const postResult: boolean | Error = await postToChannel(`${process.env.TG_MAIN_CHANNEL_ID}`, files[fileIndex].name, nextPostTime, filesCount)
     nextPostMilliseconds = newInterval * 60 * 1000
     if (postResult === true) {
       logger.info(`Post successful; next post in ${newInterval} minutes.`)

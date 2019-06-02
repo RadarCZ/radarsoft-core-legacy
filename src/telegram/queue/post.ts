@@ -7,7 +7,7 @@ const post: (data: object, contentType: string) => Promise<AxiosResponse<any>> =
   return await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/send${contentType}`, data)
 }
 
-export const postToChannel: (channelId: string, postFile: string, nextPostTime: Moment) => Promise<boolean | Error> = async (channelId, postFile, nextPostTime) => {
+export const postToChannel: (channelId: string, postFile: string, nextPostTime: Moment, filesCount: number) => Promise<boolean | Error> = async (channelId, postFile, nextPostTime, filesCount) => {
   let data: object = {
     'chat_id': channelId,
   }
@@ -26,8 +26,9 @@ export const postToChannel: (channelId: string, postFile: string, nextPostTime: 
       ]
     }
     data['caption'] = '<code>Radar\'s Butt 2.0</code>\n'
-    data['caption'] += `Next post at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n\n`
-    data['caption'] += `<a href="${postLink}">${(!!postName)?postName:postLink}</a>`
+    data['caption'] += `Next post at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`
+    data['caption'] += `Submissions in queue: ${filesCount-1}\n`
+    data['caption'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`
     data['parse_mode'] = 'HTML'
 
     try {
@@ -39,7 +40,10 @@ export const postToChannel: (channelId: string, postFile: string, nextPostTime: 
       }
     } catch(error) {
       if (error.response.error_code >= 400 && error.response.error_code < 500) {
-        data['caption'] = `<code>Radar's Butt 2.0</code>\nPost failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}.\n\n${postLink}`
+        data['caption'] = `<code>Radar's Butt 2.0</code>\n`
+        data['caption'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}.\n`
+        data['caption'] += `Submissions in queue: ${filesCount-1}\n`
+        data['caption'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`
         await post(data, sendType)
         return Promise.resolve(false)
       }
