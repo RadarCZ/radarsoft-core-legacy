@@ -1,4 +1,4 @@
-import { createLogger, format, transports } from "winston"
+import { createLogger, format, transports } from 'winston'
 import Transport from 'winston-transport'
 import * as SystemMailer from './mailer'
 
@@ -7,15 +7,15 @@ const { combine } = format
 const tsFormat = () => (new Date()).toLocaleTimeString()
 
 const options = {
-    console: {
-        timestamp: tsFormat,
-        level: 'debug',
-        handleExceptions: true
+    'console': {
+        'timestamp': tsFormat,
+        'level': 'debug',
+        'handleExceptions': true
     },
-    mail: {
-        timestamp: tsFormat,
-        level: "error",
-        handleExceptions: true
+    'mail': {
+        'timestamp': tsFormat,
+        'level': 'error',
+        'handleExceptions': true
     }
 }
 
@@ -28,9 +28,9 @@ class MailTransport extends Transport {
         //   logentries, etc.).
     }
 
-    log(info, callback) {
+    public log(info, callback) {
         setImmediate(() => {
-            this.emit("logged", info);
+            this.emit('logged', info);
         });
         SystemMailer.sendErrorEmail(info)
         // send info to mail
@@ -40,24 +40,24 @@ class MailTransport extends Transport {
 }
 
 export const logger = createLogger({
-    exitOnError: false,
-    transports: [
+    'exitOnError': false,
+    'transports': [
         new transports.Console(options.console)
     ],
-    format: combine(
+    'format': combine(
         format.colorize(),
         format.timestamp(),
         format.align(),
-        format.printf(info => `${info.level} - ${info.timestamp}: ${info.message}`)
+        format.printf((info) => `${info.level} - ${info.timestamp}: ${info.message}`)
     )
 })
 
 export const mailLogger = createLogger({
-    exitOnError: false,
-    transports: [
+    'exitOnError': false,
+    'transports': [
         new MailTransport(options.mail)
     ],
-    format: combine(
+    'format': combine(
       format.timestamp(),
       format.simple(),
     ),

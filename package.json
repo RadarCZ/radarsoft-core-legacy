@@ -1,6 +1,6 @@
 {
   "name": "radarsoft-core",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "main": "index.ts",
   "private": true,
   "scripts": {
@@ -31,6 +31,7 @@
     "@types/node": "^11.13.0",
     "nodemon": "~1.18.9",
     "ts-node": "^8.0.3",
-    "typescript": "^3.4.1"
+    "typescript": "^3.4.1",
+    "tslint": "^5.17.0"
   }
 }

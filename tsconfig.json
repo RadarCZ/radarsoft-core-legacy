@@ -1,6 +1,9 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "plugins": [{
+      "name":"typescript-tslint-plugin"
+    }],
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "es6",

@@ -1,27 +1,26 @@
+import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
+import express from 'express'
 import path from 'path'
+import { errorLogger, requestLogger } from './util/logging'
 
-if(process.env.NODE_ENV === 'test'){
-    dotenv.config({ path: path.join(process.cwd(), '.env.test') })
+if (process.env.NODE_ENV === 'test') {
+    dotenv.config({ 'path': path.join(process.cwd(), '.env.test') })
 } else {
-    dotenv.config({ path: path.join(process.cwd(), '.env') })
+    dotenv.config({ 'path': path.join(process.cwd(), '.env') })
 }
 
-import express from 'express'
-import bodyParser from 'body-parser'
-import { requestLogger, errorLogger } from './util/logging'
-
 const app = express()
-app.use(bodyParser.json({ limit: '10240kb' }))
+app.use(bodyParser.json({ 'limit': '10240kb' }))
 
-if(process.env.USE_REQUEST_LOGGING) {
+if (process.env.USE_REQUEST_LOGGING) {
     app.use(requestLogger)
 }
 
 app.set('port', process.env.PORT)
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
@@ -31,13 +30,13 @@ app.get('/api/geocaching', getGcData)
 import { getGhData } from './controllers/contacts/github-controller'
 app.get('/api/github', getGhData)
 
-import { processWebhook } from "./controllers/telegram/webhook-processor"
+import { processWebhook } from './controllers/telegram/webhook-processor'
 app.post('/api/telegram/processUpdate', processWebhook)
 
 import { queue } from './controllers/telegram/queue-controller'
 app.post('/api/telegram/queue', queue)
 
-if(process.env.USE_ERROR_LOGGING) {
+if (process.env.USE_ERROR_LOGGING) {
     app.use(errorLogger)
 }
 
