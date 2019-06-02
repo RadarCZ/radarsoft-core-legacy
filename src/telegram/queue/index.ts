@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import moment, { Moment } from 'moment'
+import moment, { Moment } from 'moment-timezone'
 import { getRandomNumber } from '../../util/misc'
 import { postToChannel } from './post'
 import { logger } from "../../config/winston";
@@ -8,13 +8,13 @@ import { logger } from "../../config/winston";
 export const handlePost: () => void = async () => {
   const queueNextPostTimeFile = path.join(process.cwd(), 'data/telegram/queue/.data.json')
   const queueFolder = path.join(process.cwd(), 'data/telegram/queue')
-  const currentTime = moment.utc()
+  const currentTime = moment.tz("Europe/Prague")
   let lastPostTime: Moment = currentTime
 
   if(fs.existsSync(queueNextPostTimeFile)) {
     const rawData = fs.readFileSync(queueNextPostTimeFile, 'utf8')
     const jsonData = JSON.parse(rawData)
-    lastPostTime = moment.utc(jsonData.nextPost)
+    lastPostTime = moment.tz(jsonData.nextPost, "Europe/Prague")
   }
 
   let nextPostMilliseconds: number = 0
@@ -36,7 +36,7 @@ export const handlePost: () => void = async () => {
     const filesCount = files.length
     const fileIndex = Math.floor(Math.random() * filesCount)
     const newInterval: number = generateInterval()
-    const nextPostTime: Moment = currentTime.add(newInterval, 'm')
+    const nextPostTime: Moment = moment(currentTime).add(newInterval, 'm')
     const postResult: boolean | Error = await postToChannel(`${process.env.TG_MAIN_CHANNEL_ID}`, files[fileIndex].name, nextPostTime)
     nextPostMilliseconds = newInterval * 60 * 1000
     if (postResult === true) {
@@ -51,8 +51,8 @@ export const handlePost: () => void = async () => {
     const writeData = {
       nextPost: nextPostTime.format()
     }  
-    fs.writeFileSync(queueNextPostTimeFile, writeData)
-    
+    fs.writeFileSync(queueNextPostTimeFile, JSON.stringify(writeData))
+
   } else {
     nextPostMilliseconds = lastPostTime.diff(currentTime)
   }

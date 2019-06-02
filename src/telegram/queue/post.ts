@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { Moment } from 'moment'
+import { Moment } from 'moment-timezone'
 import path from 'path'
 import fs from 'fs'
 
@@ -17,7 +17,7 @@ export const postToChannel: (channelId: string, postFile: string, nextPostTime: 
 
   if(fs.existsSync(queueFilePath)){
     const rawData = fs.readFileSync(queueFilePath, { encoding: 'utf8' })
-    const { fullLink, artistLink, postLink } = JSON.parse(rawData)
+    const { fullLink, artistLink, postLink, postName } = JSON.parse(rawData)
     const sendType = path.extname(fullLink) === '.gif' ? 'Document' : 'Photo'
     data[sendType.toLowerCase()] = fullLink
     data['reply_markup'] = {
@@ -25,7 +25,10 @@ export const postToChannel: (channelId: string, postFile: string, nextPostTime: 
         [{text: 'Full res', url: fullLink}, {text: "Poster's profile", url: artistLink}]
       ]
     }
-    data['caption'] = `Next post at ${nextPostTime.format('LT (Z)')}.\n\n${postLink}`
+    data['caption'] = '<code>Radar\'s Butt 2.0</code>\n'
+    data['caption'] += `Next post at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n\n`
+    data['caption'] += `<a href="${postLink}">${(!!postName)?postName:postLink}</a>`
+    data['parse_mode'] = 'HTML'
 
     try {
       const postResult = await post(data, sendType)
@@ -36,7 +39,7 @@ export const postToChannel: (channelId: string, postFile: string, nextPostTime: 
       }
     } catch(error) {
       if (error.response.error_code >= 400 && error.response.error_code < 500) {
-        data['caption'] = `Post failed. Next at ${nextPostTime.format('LT (Z)')}.\n\n${postLink}`
+        data['caption'] = `<code>Radar's Butt 2.0</code>\nPost failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}.\n\n${postLink}`
         await post(data, sendType)
         return Promise.resolve(false)
       }
