@@ -15,7 +15,7 @@ export const filterKeys = (filteredKeys, object, remove = false) => {
     }, {})
 }
 
-export const getRandomNumber: (string, number) => number = (seed, max) => {
+export const getRandomNumber: (seed: string, max: number) => number = (seed, max) => {
   const seedRandom = require('seedrandom')
   const rng = seedRandom(seed)
   return Math.floor(rng() * Math.floor(max))
