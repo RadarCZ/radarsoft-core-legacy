@@ -14,7 +14,7 @@ export const getGhData = async (req, res, next) => {
       site: 'github',
       stat1: ghData.public_repos,
       stat2: ghData.followers,
-      targetUrl: `https://github.com/users/${ghData.login}`
+      targetUrl: `https://github.com/${ghData.login}`
     }
 
     res.send(resultData)
