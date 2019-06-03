@@ -16,7 +16,7 @@ export const postToChannel:
   }
 
   const random = getRandomNumber(`${+moment()}`, 100)
-  const kofi = random > 75
+  const kofi = random > 90
 
   const queueFilePath = path.join(process.cwd(), 'data/telegram/queue', postFile)
   const postedFilePath = path.join(process.cwd(), 'data/telegram/posted', postFile)
@@ -36,7 +36,7 @@ export const postToChannel:
     data['caption'] += `Submissions in queue: ${filesCount - 1}\n`
     data['caption'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`
     if (kofi) {
-      data['caption'] += '\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
+      data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
     }
     data['parse_mode'] = 'HTML'
 
@@ -55,7 +55,7 @@ export const postToChannel:
         data['caption'] += `Submissions in queue: ${filesCount - 1}\n`
         data['caption'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`
         if (kofi) {
-          data['caption'] += '\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
+          data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
         }
         await post(data, sendType)
 
