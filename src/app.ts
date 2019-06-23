@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'test') {
 
 const app = express()
 app.use(bodyParser.json({ 'limit': '10240kb' }))
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded({ 'extended': true }))
 
 if (process.env.USE_REQUEST_LOGGING) {
     app.use(requestLogger)
