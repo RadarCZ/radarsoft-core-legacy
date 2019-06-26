@@ -1,4 +1,9 @@
 {
+    "1.4.2": {
+        "Twitch bot": [
+            "Changed bot to use logger instead of console"
+        ]
+    },
     "1.4.1": {
         "Twitch bot": [
             "Fixed bot to be actually loaded"

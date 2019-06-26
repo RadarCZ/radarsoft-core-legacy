@@ -1,3 +1,5 @@
+import { logger } from '../../config/winston'
+
 export default (address: string, port: number) => {
-    console.log(`Connected to ${address}:${port}`)
+    logger.info(`Connected to ${address}:${port}`)
 }
