@@ -1,4 +1,9 @@
 {
+    "1.4.1": {
+        "Twitch bot": [
+            "Fixed bot to be actually loaded"
+        ]
+    },
     "1.4.0": {
         "General": [
             "added changelog",
