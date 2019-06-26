@@ -21,6 +21,10 @@ export const postToChannel:
   const queueFilePath = path.join(process.cwd(), 'data/telegram/queue', postFile)
   const postedFilePath = path.join(process.cwd(), 'data/telegram/posted', postFile)
 
+  const pjsonPath = path.join(process.cwd(), 'package.json')
+  const pjsonRaw = fs.readFileSync(pjsonPath, { 'encoding': 'utf8' })
+  const { version } = JSON.parse(pjsonRaw)
+
   if (fs.existsSync(queueFilePath)) {
     const rawData = fs.readFileSync(queueFilePath, { 'encoding': 'utf8' })
     const { fullLink, artistLink, postLink, postName } = JSON.parse(rawData)
@@ -31,7 +35,7 @@ export const postToChannel:
         [{ 'text': 'Full res', 'url': fullLink}, { 'text': 'Poster\'s profile', 'url': artistLink}]
       ]
     }
-    data['caption'] = '<code>Radar\'s Butt 2.0</code> <i>(api: 1.3.1)</i>\n'
+    data['caption'] = `<code>Radar\'s Butt 2.0</code> <i>(api: ${version})</i>\n`
     data['caption'] += `Next post at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`
     data['caption'] += `Submissions in queue: ${filesCount - 1}\n`
     data['caption'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`
@@ -50,7 +54,7 @@ export const postToChannel:
       }
     } catch (error) {
       if (error.response.error_code >= 400 && error.response.error_code < 500) {
-        data['caption'] = `<code>Radar\'s Butt 2.0</code> <i>(api: 1.3.1)</i>\n`
+        data['caption'] = `<code>Radar\'s Butt 2.0</code> <i>(api: ${version})</i>\n`
         data['caption'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}.\n`
         data['caption'] += `Submissions in queue: ${filesCount - 1}\n`
         data['caption'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`

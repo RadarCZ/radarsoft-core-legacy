@@ -1,0 +1,15 @@
+{
+    "1.4.0": {
+        "General": [
+            "added changelog",
+            "added twitch bot"
+        ],
+        "Telegram bot": [
+            "changed API version being fetched dynamically"
+        ],
+        "(NEW) Twitch bot": [
+            "added basic functionality",
+            "added '!mmr command"
+        ]
+    }
+}
