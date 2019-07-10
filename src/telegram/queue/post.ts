@@ -54,14 +54,20 @@ export const postToChannel:
       }
     } catch (error) {
       if (error.response.data.error_code >= 400 && error.response.data.error_code < 500) {
-        data['caption'] = `<code>Radar\'s Butt 2.0</code> <i>(api: ${version})</i>\n`
-        data['caption'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}.\n`
-        data['caption'] += `Submissions in queue: ${filesCount - 1}\n`
-        data['caption'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`
-        if (kofi) {
-          data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
+        const failedData = {
+          'chat_id': data['chat_id'],
+          'parse_mode': data['parse_mode'],
+          'reply_markup': data['reply_markup']
         }
-        await post(data, sendType)
+
+        failedData['text'] = `<code>Radar\'s Butt 2.0</code> <i>(api: ${version})</i>\n`
+        failedData['text'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}.\n`
+        failedData['text'] += `Submissions in queue: ${filesCount - 1}\n`
+        failedData['text'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`
+        if (kofi) {
+          failedData['text'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
+        }
+        await post(failedData, 'message')
 
         return Promise.resolve(false)
       }
