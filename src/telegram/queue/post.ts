@@ -53,7 +53,7 @@ export const postToChannel:
         return Promise.resolve(true)
       }
     } catch (error) {
-      if (error.response.error_code >= 400 && error.response.error_code < 500) {
+      if (error.response.data.error_code >= 400 && error.response.data.error_code < 500) {
         data['caption'] = `<code>Radar\'s Butt 2.0</code> <i>(api: ${version})</i>\n`
         data['caption'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}.\n`
         data['caption'] += `Submissions in queue: ${filesCount - 1}\n`

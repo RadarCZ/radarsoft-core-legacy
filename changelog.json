@@ -1,4 +1,9 @@
 {
+    "1.4.3": {
+        "Telegram bot": [
+            "Fixed not sending an error post when encountering an error"
+        ]
+    },
     "1.4.2": {
         "Twitch bot": [
             "Changed bot to use logger instead of console"
