@@ -1,4 +1,9 @@
 {
+    "1.5.2": {
+        "Telegram bot": [
+            "Fixed 'Post failed' post not removing the post from queue."
+        ]
+    },
     "1.5.1": {
         "Telegram bot": [
             "Fixed Weasyl postId not parsing correctly "

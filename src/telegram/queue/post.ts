@@ -69,9 +69,13 @@ export const postToChannel:
         if (kofi) {
           failedData['text'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
         }
-        await post(failedData, 'message')
+        const postResult = await post(data, sendType)
+        if (postResult.status === 200) {
+          fs.writeFileSync(postedFilePath, rawData)
+          fs.unlinkSync(queueFilePath)
+        }
 
-        return Promise.resolve(false)
+        return Promise.resolve(true)
       }
 
       return Promise.resolve(error)
