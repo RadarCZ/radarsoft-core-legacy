@@ -38,7 +38,9 @@ export const postToChannel:
     data['caption'] = `<code>Radar\'s Butt 2.0</code> <i>(api: ${version})</i>\n`
     data['caption'] += `Next post at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`
     data['caption'] += `Submissions in queue: ${filesCount - 1}\n`
-    data['caption'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`
+    data['caption'] += `<a href="${postLink}">${
+      (!!postName) ? postName.replace(/</g, '[').replace(/>/g, ']') : postLink
+    }</a>`
     if (kofi) {
       data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
     }
@@ -61,7 +63,7 @@ export const postToChannel:
         }
 
         failedData['text'] = `<code>Radar\'s Butt 2.0</code> <i>(api: ${version})</i>\n`
-        failedData['text'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}.\n`
+        failedData['text'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`
         failedData['text'] += `Submissions in queue: ${filesCount - 1}\n`
         failedData['text'] += `<a href="${postLink}">${(!!postName) ? postName : postLink}</a>`
         if (kofi) {

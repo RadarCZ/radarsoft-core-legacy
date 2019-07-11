@@ -1,4 +1,9 @@
 {
+    "1.4.5": {
+        "Telegram bot": [
+            "Fixed <> appearance in post names causing fatal error and resulting in server crashing"
+        ]
+    },
     "1.4.4": {
         "Telegram bot": [
             "Fixed creating errorneous error posting attempt"
