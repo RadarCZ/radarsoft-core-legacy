@@ -1,4 +1,9 @@
 {
+    "1.5.0": {
+        "Telegram bot": [
+            "Added support for more pages, not just FA"
+        ]
+    },
     "1.4.5": {
         "Telegram bot": [
             "Fixed <> appearance in post names causing fatal error and resulting in server crashing"

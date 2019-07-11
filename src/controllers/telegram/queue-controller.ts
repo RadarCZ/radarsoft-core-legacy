@@ -27,8 +27,8 @@ export const queue = async (req, res, next) => {
 
   const queueDirectory = path.join(process.cwd(), 'data/telegram/queue')
   const postedDirectory = path.join(process.cwd(), 'data/telegram/posted')
-  const queueFilePath = path.join(queueDirectory, `${postId}.json`)
-  const postedFilePath = path.join(postedDirectory, `${postId}.json`)
+  const queueFilePath = path.join(queueDirectory, `${origin}_${postId}.json`)
+  const postedFilePath = path.join(postedDirectory, `${origin}_${postId}.json`)
 
   if (!fs.existsSync(queueDirectory)) {
     fs.mkdirSync(queueDirectory, { 'recursive': true })
