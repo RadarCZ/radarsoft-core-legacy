@@ -4,9 +4,9 @@ import path from 'path'
 
 export const processWebhook = (req, res, next) => {
   const { botToken } = req.query
-  const { from, text } = req.body
+  const { from, text } = req.body.message
   if (botToken === process.env.TG_BOT_TOKEN && !from['is_bot']) {
-    if (text.startsWith('/subscribe')) {
+    if (text && text.startsWith('/subscribe')) {
       const subscribersFile = path.join(process.cwd(), 'data/subscribers.json')
       if (!fs.existsSync(subscribersFile)) {
         fs.writeFileSync(subscribersFile, '[]')
@@ -17,7 +17,7 @@ export const processWebhook = (req, res, next) => {
 
       jsonData.push(`${from.id}`)
 
-      fs.writeFileSync(subscribersFile, jsonData)
+      fs.writeFileSync(subscribersFile, JSON.stringify(jsonData))
     }
     res.status(200).end()
   } else {

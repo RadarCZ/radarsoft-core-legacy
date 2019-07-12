@@ -1,4 +1,9 @@
 {
+    "1.5.4": {
+        "Telegram bot": [
+            "Fixed not responding correctly to incoming webhooks"
+        ]
+    },
     "1.5.3": {
         "Telegram bot": [
             "Fixed failing to post without correct error handling"
