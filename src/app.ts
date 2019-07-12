@@ -44,4 +44,7 @@ if (process.env.USE_ERROR_LOGGING) {
 import { kofiDongnation } from './controllers/dongnations/kofi-webhook'
 app.post('/api/kofi/dongnation', kofiDongnation)
 
+import { resendETS } from './controllers/trucksbook/tb-webhook'
+app.post('api/trucksbook/ets', resendETS)
+
 export default app
