@@ -1,4 +1,9 @@
 {
+    "1.6.1": {
+        "TB Processor": [
+            "added support for ATS"
+        ]
+    },
     "1.6.0": {
         "General": [
             "added TrucksBook webhook processor"

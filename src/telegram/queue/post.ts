@@ -67,7 +67,7 @@ export const postToChannel:
           failedData['text'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
         }
         const postResult =
-          await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, data)
+          await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, failedData)
         if (postResult.status === 200) {
           fs.writeFileSync(postedFilePath, rawData)
           fs.unlinkSync(queueFilePath)
