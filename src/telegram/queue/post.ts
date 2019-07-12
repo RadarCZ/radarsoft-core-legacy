@@ -1,12 +1,8 @@
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import fs from 'fs'
 import moment, { Moment } from 'moment-timezone'
 import path from 'path'
 import { getRandomNumber } from '../../util/misc'
-
-const post: (data: object, contentType: string) => Promise<AxiosResponse<any>> = async (data, contentType) => {
-  return await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/send${contentType}`, data)
-}
 
 export const postToChannel:
   (channelId: string, postFile: string, nextPostTime: Moment, filesCount: number) => Promise<boolean | Error>
@@ -47,7 +43,8 @@ export const postToChannel:
     data['parse_mode'] = 'HTML'
 
     try {
-      const postResult = await post(data, sendType)
+      const postResult =
+        await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/send${sendType}`, data)
       if (postResult.status === 200) {
         fs.writeFileSync(postedFilePath, rawData)
         fs.unlinkSync(queueFilePath)
@@ -69,7 +66,8 @@ export const postToChannel:
         if (kofi) {
           failedData['text'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
         }
-        const postResult = await post(data, sendType)
+        const postResult =
+          await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, data)
         if (postResult.status === 200) {
           fs.writeFileSync(postedFilePath, rawData)
           fs.unlinkSync(queueFilePath)

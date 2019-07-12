@@ -1,4 +1,9 @@
 {
+    "1.5.3": {
+        "Telegram bot": [
+            "Fixed failing to post without correct error handling"
+        ]
+    },
     "1.5.2": {
         "Telegram bot": [
             "Fixed 'Post failed' post not removing the post from queue."
