@@ -1,4 +1,12 @@
 {
+    "1.6.0": {
+        "General": [
+            "added TrucksBook webhook processor"
+        ],
+        "TB Processor": [
+            "added resending messages from TB to telegram and discord"
+        ]
+    },
     "1.5.4": {
         "Telegram bot": [
             "Fixed not responding correctly to incoming webhooks"
