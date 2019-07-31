@@ -35,7 +35,7 @@ export const postToChannel:
     data['caption'] += `Next post at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`
     data['caption'] += `Submissions in queue: ${filesCount - 1}\n`
     data['caption'] += `<a href="${postLink}">${
-      (!!postName) ? postName.replace(/</g, '[').replace(/>/g, ']') : postLink
+      (!!postName) ? postName.replace(/</g, '&lt;').replace(/>/g, '&gt;') : postLink
     }</a>`
     if (kofi) {
       data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'

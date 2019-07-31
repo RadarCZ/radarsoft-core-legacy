@@ -1,4 +1,12 @@
 {
+    "1.6.2":{
+        "Telegram bot": [
+            "Fixed replacing <> characters not being replaced with their respective html entities"
+        ],
+        "Twitch bot": [
+            "Added !steam and !lol commands"
+        ]
+    },
     "1.6.1": {
         "TB Processor": [
             "added support for ATS"
