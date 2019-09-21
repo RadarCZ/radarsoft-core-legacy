@@ -36,7 +36,7 @@ export const handlePost: () => void = async () => {
 
     const filesCount = files.length
     const fileIndex = Math.floor(Math.random() * filesCount)
-    const newInterval: number = generateInterval()
+    const newInterval: number = generateInterval(filesCount)
     const nextPostTime: Moment = moment(currentTime).add(newInterval, 'm')
     const postResult: boolean | Error =
       await postToChannel(`${process.env.TG_MAIN_CHANNEL_ID}`, files[fileIndex].name, nextPostTime, filesCount)
@@ -63,16 +63,25 @@ export const handlePost: () => void = async () => {
   setTimeout(handlePost, nextPostMilliseconds)
 }
 
-const generateInterval: () => number = () => {
+const generateInterval: (filesCount: number) => number = (filesCount) => {
   const randomSeed: number = moment().unix().valueOf()
   const randomForInterval = getRandomNumber(`${randomSeed}`, 101)
+  const filesInRegularInterval = (filesCount >= 200 && filesCount <= 1500)
   let randomDuration: number
-  if (randomForInterval <= 12) {
-    randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 5) + 1
-  } else if (randomForInterval > 12 && randomForInterval <= 22) {
-    randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 10) + 5
+  if (filesInRegularInterval) {
+    if (randomForInterval <= 12) {
+      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 5) + 1
+    } else if (randomForInterval > 12 && randomForInterval <= 22) {
+      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 10) + 5
+    } else {
+      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 15) + 15
+    }
   } else {
-    randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 15) + 15
+    if (filesCount < 200) {
+      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 15) + 15
+    } else {
+      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 5) + 1
+    }
   }
 
   return randomDuration

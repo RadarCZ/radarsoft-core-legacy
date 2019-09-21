@@ -1,5 +1,10 @@
 {
-    "1.6.2":{
+    "1.6.3": {
+        "Telegram bot": [
+            "Changed interval generation for when there's too many or too little posts in queue. Below 200 generates only 15-30min interval; above 1500 generates only 1-5min interval; anything between generates still the same"
+        ]
+    },
+    "1.6.2": {
         "Telegram bot": [
             "Fixed replacing <> characters not being replaced with their respective html entities"
         ],
