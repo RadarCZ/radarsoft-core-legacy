@@ -1,4 +1,9 @@
 {
+    "1.7.0": {
+        "Telegram bot": [
+            "Added bot token to queue request path, making it safer"
+        ]
+    },
     "1.6.3": {
         "Telegram bot": [
             "Changed interval generation for when there's too many or too little posts in queue. Below 200 generates only 15-30min interval; above 1500 generates only 1-5min interval; anything between generates still the same"

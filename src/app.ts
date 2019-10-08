@@ -35,7 +35,7 @@ import { processWebhook } from './controllers/telegram/webhook-processor'
 app.post('/api/telegram/processUpdate', processWebhook)
 
 import { queue } from './controllers/telegram/queue-controller'
-app.post('/api/telegram/queue', queue)
+app.post('/api/telegram/:botToken/queue', queue)
 
 if (process.env.USE_ERROR_LOGGING) {
     app.use(errorLogger)

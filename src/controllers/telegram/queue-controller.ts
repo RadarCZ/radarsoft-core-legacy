@@ -5,10 +5,15 @@ import url from 'url'
 import { logger } from '../../config/winston'
 
 export const queue = async (req, res, next) => {
+  if(req.params.botToken != process.env.TG_BOT_TOKEN) {
+    res.sendStatus(401)
+    return
+  }
+
   const { fullLink, artistLink, postLink, origin } = req.body
   if (!(fullLink && artistLink && postLink && origin)) {
     logger.error(`Invalid request => ${req}`)
-    res.status(400).end()
+    res.sendStatus(400)
 
     return
   }
@@ -18,7 +23,7 @@ export const queue = async (req, res, next) => {
   const postPathSegments = (!!postPath ? postPath.split('/') : [])
   if (postPathSegments.length < 3) {
     logger.error('not a valid queue link')
-    res.status(400).end()
+    res.sendStatus(400)
 
     return
   }
