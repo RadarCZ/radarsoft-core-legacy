@@ -12,7 +12,7 @@ export const postToChannel:
   }
 
   const random = getRandomNumber(`${+moment()}`, 100)
-  const kofi = random > 90
+  const kofi = random > 95
 
   const queueFilePath = path.join(process.cwd(), 'data/telegram/queue', postFile)
   const postedFilePath = path.join(process.cwd(), 'data/telegram/posted', postFile)

@@ -1,4 +1,10 @@
 {
+    "1.7.1": {
+        "Telegram bot": [
+            "Lowered chance for ko-fi link to appear",
+            "Changed queue mechanics to the chronological order (according to site IDs), with balanced distribution of supported (and available) sites"
+        ]
+    },
     "1.7.0": {
         "Telegram bot": [
             "Added bot token to queue request path, making it safer"

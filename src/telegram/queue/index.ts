@@ -20,26 +20,50 @@ export const handlePost: () => void = async () => {
   let nextPostMilliseconds: number = 0
 
   if (lastPostTime.isSameOrBefore(currentTime)) {
-    let files: fs.Dirent[] = []
+    let allFiles: fs.Dirent[] = []
     if (fs.existsSync(queueFolder)) {
-      files = fs.readdirSync(queueFolder, { 'withFileTypes': true }).filter((fsEntry) => {
+      allFiles = fs.readdirSync(queueFolder, { 'withFileTypes': true }).filter((fsEntry) => {
         return (!fsEntry.name.startsWith('.') && fsEntry.isFile())
       })
     }
 
-    if (files.length < 1) {
+    if (allFiles.length < 1) {
       logger.info('Nothing to post, waiting 1 minute.')
       setTimeout(handlePost, 60000)
 
       return
     }
 
-    const filesCount = files.length
-    const fileIndex = Math.floor(Math.random() * filesCount)
+    const availableOrigins: string[] = allFiles.reduce((origins, file) => {
+      const origin = file.name.substring(0, 2)
+      if (origins.includes(origin)) {
+        return origins
+      }
+      return [ ...origins, origin ]
+    }, [] as string[])
+
+    let chosenFile: fs.Dirent = allFiles[0];
+
+    const random = getRandomNumber(`${+moment()}`, 1000)
+    let chanceMin = 0
+    let chanceMax = Math.floor(1000 / availableOrigins.length)
+
+    for (let i = 0; i < availableOrigins.length; i++) {
+      const origin = availableOrigins[i]
+      if (random > chanceMin && random <= chanceMax) {
+        chosenFile = allFiles.find(f => f.name.startsWith(origin)) || allFiles[0]
+        break
+      }
+
+      chanceMin = chanceMax
+      chanceMax += chanceMin
+    }    
+
+    const filesCount = allFiles.length
     const newInterval: number = generateInterval(filesCount)
     const nextPostTime: Moment = moment(currentTime).add(newInterval, 'm')
     const postResult: boolean | Error =
-      await postToChannel(`${process.env.TG_MAIN_CHANNEL_ID}`, files[fileIndex].name, nextPostTime, filesCount)
+      await postToChannel(`${process.env.TG_MAIN_CHANNEL_ID}`, chosenFile.name, nextPostTime, filesCount)
     nextPostMilliseconds = newInterval * 60 * 1000
     if (postResult === true) {
       logger.info(`Post successful. Next post in ${newInterval} minutes.`)
