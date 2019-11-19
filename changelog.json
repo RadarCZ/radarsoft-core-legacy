@@ -1,4 +1,9 @@
 {
+    "1.7.2": {
+        "Telegram bot": [
+            "Added URI encoding on full res link"
+        ]
+    },
     "1.7.1": {
         "Telegram bot": [
             "Lowered chance for ko-fi link to appear",

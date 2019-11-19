@@ -26,10 +26,10 @@ export const postToChannel:
     const { fullLink, artistLink, postLink, postName } = JSON.parse(rawData)
     const postNameEscaped = (!!postName) ? postName.replace(/</g, '&lt;').replace(/>/g, '&gt;') : postLink;
     const sendType = path.extname(fullLink) === '.gif' ? 'Document' : 'Photo'
-    data[sendType.toLowerCase()] = fullLink
+    data[sendType.toLowerCase()] = encodeURI(fullLink)
     data['reply_markup'] = {
       'inline_keyboard': [
-        [{ 'text': 'Full res', 'url': fullLink}, { 'text': 'Poster\'s profile', 'url': artistLink}]
+        [{ 'text': 'Full res', 'url': encodeURI(fullLink)}, { 'text': 'Poster\'s profile', 'url': artistLink}]
       ]
     }
     data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n\n`
