@@ -1,4 +1,9 @@
 {
+    "1.7.3": {
+        "Telegram bot": [
+            "Changed post priority algorithm."
+        ]
+    },
     "1.7.2": {
         "Telegram bot": [
             "Added URI encoding on full res link"

@@ -42,7 +42,7 @@ export const handlePost: () => void = async () => {
       return [ ...origins, origin ]
     }, [] as string[])
 
-    let chosenFile: fs.Dirent = allFiles[0];
+    let chosenOrigin: string = ''
 
     const random = getRandomNumber(`${+moment()}`, 1000)
     let chanceMin = 0
@@ -51,13 +51,30 @@ export const handlePost: () => void = async () => {
     for (let i = 0; i < availableOrigins.length; i++) {
       const origin = availableOrigins[i]
       if (random > chanceMin && random <= chanceMax) {
-        chosenFile = allFiles.find(f => f.name.startsWith(origin)) || allFiles[0]
+        chosenOrigin = origin
         break
       }
 
       chanceMin = chanceMax
       chanceMax += chanceMin
-    }    
+    }
+
+    const applicableFiles: fs.Dirent[] = allFiles.filter(file => file.name.startsWith(chosenOrigin));
+    const applicableFileIds: number[] = applicableFiles.map((file) => {
+      const fileName = file.name
+      const idString = fileName.substring(fileName.lastIndexOf('_') + 1, fileName.lastIndexOf('.'))
+      return parseInt(idString)
+    })
+
+    const idToBePosted = Math.min(...applicableFileIds);
+    const chosenFile = allFiles.find(file => file.name === `${chosenOrigin}_${idToBePosted}.json`)
+
+    if (!chosenFile) {
+      logger.info('Bot made fucky wucky uwu Twying in wone minwute 0w0')
+      setTimeout(handlePost, 60000)
+
+      return
+    }
 
     const filesCount = allFiles.length
     const newInterval: number = generateInterval(filesCount)
