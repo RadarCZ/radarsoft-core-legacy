@@ -1,4 +1,9 @@
 {
+    "1.7.4": {
+        "Telegram bot": [
+            "Removed postId 'calculation'."
+        ]
+    },
     "1.7.3": {
         "Telegram bot": [
             "Changed post priority algorithm."

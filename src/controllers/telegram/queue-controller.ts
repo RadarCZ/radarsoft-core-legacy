@@ -10,7 +10,7 @@ export const queue = async (req, res, next) => {
     return
   }
 
-  const { fullLink, artistLink, postLink, origin } = req.body
+  const { fullLink, artistLink, postLink, origin, postId } = req.body
   if (!(fullLink && artistLink && postLink && origin)) {
     logger.error(`Invalid request => ${req}`)
     res.sendStatus(400)
@@ -27,8 +27,6 @@ export const queue = async (req, res, next) => {
 
     return
   }
-
-  const postId = parseInt(postPathSegments[origin === 'WE' ? 3 : 2], 10)
 
   const queueDirectory = path.join(process.cwd(), 'data/telegram/queue')
   const postedDirectory = path.join(process.cwd(), 'data/telegram/posted')
