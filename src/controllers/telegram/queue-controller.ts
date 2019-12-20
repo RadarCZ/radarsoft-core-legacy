@@ -28,6 +28,16 @@ export const queue = async (req, res, next) => {
     return
   }
 
+  const saveObject = {
+    fullLink,
+    artistLink,
+    postLink,
+    postName: req.body.postName,
+    origin,
+    postId,
+    tgImageLink: (req.body.tgImageLink || fullLink)
+  };
+
   const queueDirectory = path.join(process.cwd(), 'data/telegram/queue')
   const postedDirectory = path.join(process.cwd(), 'data/telegram/posted')
   const queueFilePath = path.join(queueDirectory, `${origin}_${postId}.json`)
@@ -42,7 +52,7 @@ export const queue = async (req, res, next) => {
   }
 
   if (!fs.existsSync(postedFilePath)) {
-    fs.writeFileSync(queueFilePath, JSON.stringify(req.body))
+    fs.writeFileSync(queueFilePath, JSON.stringify(saveObject))
   } else {
     logger.info('Image was already posted.')
   }
