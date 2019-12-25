@@ -1,4 +1,9 @@
 {
+    "1.7.6": {
+        "TB Processor": [
+            "Fixed TB processor."
+        ]
+    },
     "1.7.5": {
         "Telegram bot": [
             "Added parameter for post requests, to be able to have two image links, in case a site has some serving middleware instead of raw files as a full resolution (sofurry for example)"

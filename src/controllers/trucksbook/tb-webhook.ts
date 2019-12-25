@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const resendETS = (req, res, next) => {
     const game = `${req.params.game}`.toUpperCase()
-    const requestData = JSON.parse(Object.keys(req.body)[0])
+    const requestData = req.body
     const data = {
         'chat_id': `${process.env[`TG_${game}_CHAT`]}`,
         'parse_mode': 'Markdown'
