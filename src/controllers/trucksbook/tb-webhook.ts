@@ -10,7 +10,7 @@ export const resendETS = (req, res, next) => {
         'chat_id': `${process.env[`TG_${game}_CHAT`]}`,
         'parse_mode': 'HTML'
     }
-    tgData['text'] = `<b>${requestData.username}<b> odjel zakázku:\n`
+    tgData['text'] = `<b>${requestData.username}</b> odjel zakázku:\n`
     tgData['text'] += `${contentParts[0].replace(/>/g, '&gt;')}\n`
     tgData['text'] += `<a href='${detailsUrl}'>Delivery details</a>`
 
