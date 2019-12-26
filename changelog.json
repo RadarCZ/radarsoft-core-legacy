@@ -1,7 +1,8 @@
 {
     "1.7.6": {
         "TB Processor": [
-            "Fixed TB processor."
+            "Fixed TB processor.",
+            "Changed message appearance."
         ]
     },
     "1.7.5": {
