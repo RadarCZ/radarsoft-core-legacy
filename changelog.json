@@ -1,4 +1,9 @@
 {
+    "1.7.8": {
+        "Telegram bot": [
+            "Added support for tip links"
+        ]
+    },
     "1.7.7": {
         "TB Processor": [
             "Changed message appearance."

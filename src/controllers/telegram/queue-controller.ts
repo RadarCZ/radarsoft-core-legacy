@@ -35,7 +35,8 @@ export const queue = async (req, res, next) => {
     postName: req.body.postName,
     origin,
     postId,
-    tgImageLink: (req.body.tgImageLink || fullLink)
+    tgImageLink: (req.body.tgImageLink || fullLink),
+    tipLink : req.body.tipLink
   };
 
   const queueDirectory = path.join(process.cwd(), 'data/telegram/queue')

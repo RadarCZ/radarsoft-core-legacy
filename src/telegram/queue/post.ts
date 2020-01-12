@@ -23,7 +23,7 @@ export const postToChannel:
 
   if (fs.existsSync(queueFilePath)) {
     const rawData = fs.readFileSync(queueFilePath, { 'encoding': 'utf8' })
-    const { fullLink, artistLink, postLink, postName, tgImageLink } = JSON.parse(rawData)
+    const { fullLink, artistLink, postLink, postName, tgImageLink, tipLink } = JSON.parse(rawData)
     const postNameEscaped = (!!postName) ? postName.replace(/</g, '&lt;').replace(/>/g, '&gt;') : postLink;
     const sendType = path.extname(fullLink) === '.gif' ? 'Document' : 'Photo'
     data[sendType.toLowerCase()] = encodeURI(tgImageLink || fullLink)
@@ -37,8 +37,12 @@ export const postToChannel:
     data['caption'] += `Next post at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`
     data['caption'] += `Submissions in queue: ${filesCount - 1}\n`
     
-    if (kofi) {
-      data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>'
+    if (tipLink) {
+      data['caption'] += `\n\n<a href="${tipLink}">Tip the artist!</a>`
+    }
+
+    if (!tipLink && kofi) {
+      data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>'
     }
     data['parse_mode'] = 'HTML'
 
