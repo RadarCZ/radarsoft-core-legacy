@@ -105,23 +105,24 @@ export const handlePost: () => void = async () => {
 }
 
 const generateInterval: (filesCount: number) => number = (filesCount) => {
-  const randomSeed: number = moment().unix().valueOf()
-  const randomForInterval = getRandomNumber(`${randomSeed}`, 101)
-  const filesInRegularInterval = (filesCount >= 200 && filesCount <= 1500)
+  const randomSeedBase: number = moment().unix().valueOf()
+  const randomForInterval = getRandomNumber(`${randomSeedBase}`, 101)
+  const randomSeedFinal = `${randomSeedBase / randomForInterval}`
+  const filesInRegularInterval = (filesCount >= 200 && filesCount <= 1000)
   let randomDuration: number
   if (filesInRegularInterval) {
     if (randomForInterval <= 12) {
-      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 5) + 1
+      randomDuration = getRandomNumber(randomSeedFinal, 5) + 1
     } else if (randomForInterval > 12 && randomForInterval <= 22) {
-      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 10) + 5
+      randomDuration = getRandomNumber(randomSeedFinal, 10) + 5
     } else {
-      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 15) + 15
+      randomDuration = getRandomNumber(randomSeedFinal, 15) + 15
     }
   } else {
     if (filesCount < 200) {
-      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 15) + 15
+      randomDuration = getRandomNumber(randomSeedFinal, 15) + 15
     } else {
-      randomDuration = getRandomNumber(`${randomSeed / randomForInterval}`, 5) + 1
+      randomDuration = getRandomNumber(randomSeedFinal, 5) + 1
     }
   }
 
