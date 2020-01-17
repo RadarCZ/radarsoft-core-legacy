@@ -24,9 +24,14 @@ export const postToChannel:
   if (fs.existsSync(queueFilePath)) {
     const rawData = fs.readFileSync(queueFilePath, { 'encoding': 'utf8' })
     const { fullLink, artistLink, postLink, postName, tgImageLink, tipLink } = JSON.parse(rawData)
-    const postNameEscaped = (!!postName) ? postName.replace(/</g, '&lt;').replace(/>/g, '&gt;') : postLink;
+    const postNameEscaped = (!!postName) ? postName.replace(/</g, '&lt;').replace(/>/g, '&gt;') : postLink
     const sendType = path.extname(fullLink) === '.gif' ? 'Document' : 'Photo'
-    data[sendType.toLowerCase()] = encodeURI(tgImageLink || fullLink)
+    const dataSendType = {
+      "Document": encodeURI(fullLink),
+      "Photo": encodeURI(tgImageLink || fullLink)
+    }
+    
+    data[sendType.toLowerCase()] = dataSendType[sendType]
     data['reply_markup'] = {
       'inline_keyboard': [
         [{ 'text': 'Full res', 'url': encodeURI(fullLink)}, { 'text': 'Poster\'s profile', 'url': artistLink}]

@@ -1,4 +1,9 @@
 {
+    "1.7.10": {
+        "Telegram bot": [
+            "Fixed using preview for GIF animations."
+        ]
+    },
     "1.7.9": {
         "Telegram bot": [
             "Changed high queue threshold from 1500 to 1000 so the more recent pictures can appear."
