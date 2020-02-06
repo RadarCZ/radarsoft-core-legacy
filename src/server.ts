@@ -5,11 +5,13 @@ import { handlePost } from './telegram/queue';
 import Handlers from './twitch/handlers'
 import TwitchClient from './twitch/TwitchClient';
 import TwitchOptions from './twitch/TwitchOptions';
+import { post2019nCovUpdate } from './util/2019nCov';
 
 const server = app.listen(app.get('port'), () => {
   logger.info(`App is running at http://localhost:${app.get('port')} in ${app.get('env')} mode`)
 
   handlePost()
+  post2019nCovUpdate()
 
   axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/setWebhook`, {
     'url' : `https://radarsoft.cz/api/telegram/processUpdate?botToken=${process.env.TG_BOT_TOKEN}`,
