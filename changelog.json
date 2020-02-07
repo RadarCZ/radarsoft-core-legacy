@@ -1,4 +1,9 @@
 {
+    "1.7.13": {
+        "2019nCov Utility": [
+            "Changed status getting"
+        ]
+    },
     "1.7.12": {
         "2019nCov Utility": [
             "Added status reporting every 4 hours until there's 0 confirmed."
