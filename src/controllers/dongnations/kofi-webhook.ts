@@ -1,39 +1,40 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'fs';
+import path from 'path';
+import { IRadarsoftHandler } from '../IRadarsoftHandler';
 
-export const kofiDongnation = (req, res, next) => {
-    const { from_name, amount, timestamp } = req.body.data
-    const donationsFile = path.join(process.cwd(), 'data/donations.json')
+export const kofiDongnation: IRadarsoftHandler = (req, res) => {
+    const { 'from_name': fromName, amount, timestamp } = req.body.data;
+    const donationsFile = path.join(process.cwd(), 'data/donations.json');
 
     if (!fs.existsSync(donationsFile)) {
-        fs.writeFileSync(donationsFile, '{}')
+        fs.writeFileSync(donationsFile, '{}');
     }
 
-    const rawData = fs.readFileSync(donationsFile, 'utf8')
-    const jsonData = JSON.parse(rawData)
+    const rawData = fs.readFileSync(donationsFile, 'utf8');
+    const jsonData = JSON.parse(rawData);
 
-    const amountNumber = parseInt(amount, 10)
-    const amountWeeks = Math.floor(amountNumber / 3)
-    const amountDays = amountWeeks * 7
+    const amountNumber = parseInt(amount, 10);
+    const amountWeeks = Math.floor(amountNumber / 3);
+    const amountDays = amountWeeks * 7;
 
-    if (!jsonData[from_name]) {
-        jsonData[from_name] = {
+    if (!jsonData[fromName]) {
+        jsonData[fromName] = {
             'timestamp': '',
-            'last_amount': 0,
-            'total_amount': 0,
-            'days_remaining': 7
-        }
+            'lastAmount': 0,
+            'totalAmount': 0,
+            'daysRemaining': 7
+        };
     }
 
-    jsonData[from_name] = {
+    jsonData[fromName] = {
         timestamp,
-        'last_amount': amountNumber
-    }
+        'lastAmount': amountNumber
+    };
 
-    jsonData[from_name].totalAmount += amountNumber
-    jsonData[from_name].days_remaining += amountDays
+    jsonData[fromName].totalAmount += amountNumber;
+    jsonData[fromName].daysRemaining += amountDays;
 
-    fs.writeFileSync(donationsFile, jsonData)
+    fs.writeFileSync(donationsFile, jsonData);
 
-    res.status(200).end()
-}
+    res.status(200).end();
+};

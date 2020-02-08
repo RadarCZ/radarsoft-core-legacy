@@ -1,12 +1,13 @@
-import axios from 'axios'
+import { IRadarsoftHandler } from '../IRadarsoftHandler';
+import axios from 'axios';
 
-export const getGhData = async (req, res, next) => {
-  const { u } = req.query
-  const url = `https://api.github.com/users/${u}`
-  const ghResponse = await axios.get(url)
+export const getGhData: IRadarsoftHandler = async (req, res) => {
+  const { u } = req.query;
+  const url = `https://api.github.com/users/${u}`;
+  const ghResponse = await axios.get(url);
 
   if (ghResponse.status === 200 || ghResponse.status === 301) {
-    const ghData = ghResponse.data
+    const ghData = ghResponse.data;
 
     const resultData = {
       'icon': ghData.avatar_url,
@@ -15,10 +16,10 @@ export const getGhData = async (req, res, next) => {
       'stat1': ghData.public_repos,
       'stat2': ghData.followers,
       'targetUrl': `https://github.com/${ghData.login}`
-    }
+    };
 
-    res.send(resultData)
+    res.send(resultData);
   } else {
-    res.send(new Error(ghResponse.statusText))
+    res.send(new Error(ghResponse.statusText));
   }
-}
+};

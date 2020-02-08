@@ -1,4 +1,14 @@
 {
+    "2.0.0": {
+        "Whole project": [
+            "Moved from tslint to eslint",
+            "Added few callback/handler types to improve readability",
+            "Updated dependencies"
+        ],
+        "2019nCov Utility": [
+            "Fixed status report scheduling"
+        ]
+    },
     "1.7.13": {
         "2019nCov Utility": [
             "Changed status getting"

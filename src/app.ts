@@ -1,50 +1,50 @@
-import bodyParser from 'body-parser'
-import dotenv from 'dotenv'
-import express from 'express'
-import path from 'path'
-import { errorLogger, requestLogger } from './util/logging'
+import path from 'path';
+import { errorLogger, requestLogger } from './util/logging';
+import { getGcData } from './controllers/contacts/geocaching-controller';
+import { getGhData } from './controllers/contacts/github-controller';
+import { processWebhook } from './controllers/telegram/webhook-processor';
+import { queue } from './controllers/telegram/queue-controller';
+import { kofiDongnation } from './controllers/dongnations/kofi-webhook';
+import { relayETSPayload } from './controllers/trucksbook/tb-webhook';
+import express, { Application } from 'express';
+import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
 
 if (process.env.NODE_ENV === 'test') {
-    dotenv.config({ 'path': path.join(process.cwd(), '.env.test') })
+    dotenv.config({ 'path': path.join(process.cwd(), '.env.test') });
 } else {
-    dotenv.config({ 'path': path.join(process.cwd(), '.env') })
+    dotenv.config({ 'path': path.join(process.cwd(), '.env') });
 }
 
-const app = express()
-app.use(bodyParser.json({ 'limit': '10240kb' }))
-app.use(bodyParser.urlencoded({ 'extended': true }))
+const app: Application = express();
+app.use(bodyParser.json({ 'limit': '10240kb' }));
+app.use(bodyParser.urlencoded({ 'extended': true }));
 
 if (process.env.USE_REQUEST_LOGGING) {
-    app.use(requestLogger)
+    app.use(requestLogger);
 }
 
-app.set('port', process.env.PORT)
+app.set('port', process.env.PORT);
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
-import { getGcData } from './controllers/contacts/geocaching-controller'
-app.get('/api/geocaching', getGcData)
+app.get('/api/geocaching', getGcData);
 
-import { getGhData } from './controllers/contacts/github-controller'
-app.get('/api/github', getGhData)
+app.get('/api/github', getGhData);
 
-import { processWebhook } from './controllers/telegram/webhook-processor'
-app.post('/api/telegram/processUpdate', processWebhook)
+app.post('/api/telegram/processUpdate', processWebhook);
 
-import { queue } from './controllers/telegram/queue-controller'
-app.post('/api/telegram/:botToken/queue', queue)
+app.post('/api/telegram/:botToken/queue', queue);
 
 if (process.env.USE_ERROR_LOGGING) {
-    app.use(errorLogger)
+    app.use(errorLogger);
 }
 
-import { kofiDongnation } from './controllers/dongnations/kofi-webhook'
-app.post('/api/kofi/dongnation', kofiDongnation)
+app.post('/api/kofi/dongnation', kofiDongnation);
 
-import { resendETS } from './controllers/trucksbook/tb-webhook'
-app.post('/api/trucksbook/:game', resendETS)
+app.post('/api/trucksbook/:game', relayETSPayload);
 
-export default app
+export default app;

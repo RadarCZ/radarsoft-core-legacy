@@ -1,35 +1,35 @@
-import { ChatUserstate } from 'tmi.js'
-import TwitchClient from '../TwitchClient'
-import { default as lolCommand } from './commands/lol'
-import { default as mmrCommand } from './commands/mmr'
-import { default as steamCommand } from './commands/steam'
+import TwitchClient from '../TwitchClient';
+import { lolCommand } from './commands/lol';
+import { mmrCommand } from './commands/mmr';
+import { steamCommand } from './commands/steam';
+import { ChatUserstate } from 'tmi.js';
 
-export default (channel: string, userState: ChatUserstate, message: string, self: boolean) => {
+export const commandsHandler: (channel: string, userState: ChatUserstate, message: string, self: boolean) => void = (channel, userState, message, self) => {
     if (self) {
-        return
+        return;
     }
 
-    const cleanMessage: string = message.trim()
+    const cleanMessage: string = message.trim();
 
     if (!cleanMessage.startsWith('!')) {
-        return
+        return;
     }
 
-    const command: string = cleanMessage.substr(1)
+    const command: string = cleanMessage.substr(1);
 
-    const client = TwitchClient.getInstance()
+    const client = TwitchClient.getInstance();
 
     switch (command) {
         case 'mmr':
-            mmrCommand(channel)
-            break
+            mmrCommand(channel);
+            break;
         case 'steam':
-            steamCommand(channel)
-            break
+            steamCommand(channel);
+            break;
         case 'lol':
-            lolCommand(channel)
-            break
+            lolCommand(channel);
+            break;
         default:
-            client.say(channel, `Příkaz ${command} (ještě) neumím FeelsBadMan`)
+            client.say(channel, `Příkaz ${command} (ještě) neumím FeelsBadMan`);
     }
-}
+};

@@ -3,7 +3,7 @@
   "extends": "tslint:recommended",
   "jsRules": {},
   "rules": {
-    "semicolon": false,
+    "semicolon": [true, "always"],
     "arrow-parens": true,
     "newline-before-return": true,
     "quotemark": [

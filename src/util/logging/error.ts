@@ -1,18 +1,19 @@
-import { logger, mailLogger } from '../../config/winston'
+import { logger } from '../../config/winston';
+import { Request, NextFunction, Response } from 'express';
 
-export default (err, req, res, next) => {
-  logger.error(JSON.stringify(err.stack))
+declare type ErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => void;
+
+export const errorLogger: ErrorHandler = (err, req, res, next) => {
+  logger.error(JSON.stringify(err.stack));
 
   // HANDLE ERROR ACCORDING TO ITS KIND
   if (err.kind === 'not-found') {
-    res.status(404)
-    res.send({ 'item': err.item, 'errors': ['Not found'] })
+    res.status(404);
+    res.send({ 'item': err.item, 'errors': ['Not found'] });
   } else {
-    res.status(err.status || 500)
-    res.send({ 'message': err.stack })
+    res.status(err.status || 500);
+    res.send({ 'message': err.stack });
   }
 
-  if (process.env.FORWARD_ERRORS_TO_EMAIL) {
-    mailLogger.error({ 'error': err, 'req': req, 'res': res })
-  }
-}
+  next();
+};
