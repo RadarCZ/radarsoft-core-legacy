@@ -13,12 +13,16 @@ const server = app.listen(app.get('port'), () => {
   handlePost();
   post2019nCovUpdate();
 
-  axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/setWebhook`, {
-    'url' : `https://radarsoft.cz/api/telegram/processUpdate?botToken=${process.env.TG_BOT_TOKEN}`,
-    'allowed_updates' : ['message']
-  }).then(() => {
-    logger.info('Telegram WebHook endpoint set.');
-  }).catch(logger.info);
+  if (process.env.TG_BOT_TOKEN) {
+    axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/setWebhook`, {
+      'url' : `https://radarsoft.cz/api/telegram/processUpdate?botToken=${process.env.TG_BOT_TOKEN}`,
+      'allowed_updates' : ['message']
+    }).then(() => {
+      logger.info('Telegram WebHook endpoint set.');
+    }).catch(logger.info);
+  } else {
+    logger.warn('Unable to attach Telegram webhook, no token (TG_BOT_TOKEN)');
+  }
 
   if (!!process.env.TWITCH_BOT_USERNAME
     && process.env.TWITCH_BOT_OAUTH
@@ -29,6 +33,8 @@ const server = app.listen(app.get('port'), () => {
         process.env.TWITCH_CHANNEL_NAME);
       TwitchClient.create(options, Handlers);
       TwitchClient.getInstance().connect();
+    } else {
+      logger.warn('Unable to connect to Twitch, missing credentials (TWITCH_BOT_USERNAME, TWITCH_BOT_OAUTH, TWITCH_CHANNEL_NAME)');
     }
 
   logger.info('Press CTRL-C to stop');
