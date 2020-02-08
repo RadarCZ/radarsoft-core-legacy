@@ -33,6 +33,8 @@ const server = app.listen(app.get('port'), () => {
         process.env.TWITCH_CHANNEL_NAME);
       TwitchClient.create(options, Handlers);
       TwitchClient.getInstance().connect();
+    } else {
+      logger.warn('Unable to connect to Twitch, missing credentials (TWITCH_BOT_USERNAME, TWITCH_BOT_OAUTH, TWITCH_CHANNEL_NAME)');
     }
 
   logger.info('Press CTRL-C to stop');
