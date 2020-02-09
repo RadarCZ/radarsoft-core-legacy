@@ -1,0 +1,24 @@
+{
+   "type": "postgres",
+   "host": "radarsoft.cz",
+   "port": 5432,
+   "username": "postgres",
+   "password": "Radarovo1995",
+   "database": "radarsoft",
+   "synchronize": false,
+   "logging": false,
+   "entities": [
+      "src/entity/*.ts"
+   ],
+   "migrations": [
+      "src/migration/*.ts"
+   ],
+   "subscribers": [
+      "src/subscriber/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+   }
+}

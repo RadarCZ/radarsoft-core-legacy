@@ -1,33 +1,67 @@
 import { logger } from '../config/winston';
+import NCovStats from './structs/nCovStats';
+import TelegramChatData from './structs/telegramChatData';
+import { NCovStatType } from './enums';
+import applyConverters from 'axios-case-converter';
 import axios from 'axios';
 
-class NCovStats {
-    public Confirmed = 0;
-    public Deaths = 0;
-    public Recovered = 0;
-}
+export default class NCovTracker {
+    private urlConfirmed: string;
+    private urlDeaths: string;
+    private urlRecovered: string;
 
-export const post2019nCovUpdate: () => void = async () => {
-    if (!process.env.TG_BOT_TOKEN) {
-        logger.warn('Skipping 2019-nCov update, no Telegram token (TG_BOT_TOKEN)');
-
-        return;
+    public constructor () {
+        this.urlConfirmed = this.constructURL(NCovStatType.Confirmed);
+        this.urlDeaths = this.constructURL(NCovStatType.Deaths);
+        this.urlRecovered = this.constructURL(NCovStatType.Recovered);
     }
 
-    const confirmedResponse = await axios.get('https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/1/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22Confirmed%22%2C%22outStatisticFieldName%22%3A%22value%22%7D%5D&outSR=102100&cacheHint=true');
-    const deathsResponse = await axios.get('https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/1/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22Deaths%22%2C%22outStatisticFieldName%22%3A%22value%22%7D%5D&outSR=102100&cacheHint=true');
-    const recoveredResponse = await axios.get('https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/1/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22Recovered%22%2C%22outStatisticFieldName%22%3A%22value%22%7D%5D&outSR=102100&cacheHint=true');
+    public async report(): Promise<boolean> {
+        if (!process.env.TG_BOT_TOKEN) {
+            logger.warn('Skipping 2019-nCov update, no Telegram token (TG_BOT_TOKEN)');
 
-    const finalResults = new NCovStats();
-    finalResults.Confirmed = confirmedResponse.data.features[0].attributes.value;
-    finalResults.Deaths = deathsResponse.data.features[0].attributes.value;
-    finalResults.Recovered = recoveredResponse.data.features[0].attributes.value;
-    const telegramData = {
-        'chat_id': parseInt(`${process.env.TG_HOOSKWOOF_UPDATES_ID}`, 10),
-        'text': `<b>2019-nCoV status report</b>\n Confirmed: ${finalResults.Confirmed}\n Deaths: ${finalResults.Deaths}\n Recovered: ${finalResults.Recovered}`,
-        'parse_mode': 'HTML'
-    };
+            return false;
+        }
 
-    await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, telegramData);
-    setTimeout(post2019nCovUpdate, 14400000);
-};
+        const confirmedResponse = await axios.get(this.urlConfirmed);
+        const deathsResponse = await axios.get(this.urlDeaths);
+        const recoveredResponse = await axios.get(this.urlRecovered);
+
+        const finalResults = new NCovStats(
+            confirmedResponse.data.features[0].attributes.value,
+            deathsResponse.data.features[0].attributes.value,
+            recoveredResponse.data.features[0].attributes.value
+        );
+
+        const telegramData = new TelegramChatData(
+            parseInt(`${process.env.TG_HOOSKWOOF_UPDATES_ID}`, 10),
+            `<b>2019-nCoV status report</b>\n Confirmed: ${finalResults.Confirmed}\n Deaths: ${finalResults.Deaths}\n Recovered: ${finalResults.Recovered}`,
+            'HTML'
+        );
+
+        const client = applyConverters(axios.create());
+        await client.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, telegramData);
+
+        return true;
+    }
+
+    private constructURL(type: NCovStatType): string {
+        let strType: string;
+        switch (type) {
+            case NCovStatType.Confirmed:
+                strType = 'Confirmed';
+                break;
+            case NCovStatType.Deaths:
+                strType = 'Deaths';
+                break;
+            case NCovStatType.Recovered:
+                strType = 'Recovered';
+                break;
+            default:
+                throw new Error(`Invalid NCov statistic type: ${type}`);
+        }
+        const url = `https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/1/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22${strType}%22%2C%22outStatisticFieldName%22%3A%22value%22%7D%5D&outSR=102100&cacheHint=true`;
+
+        return url;
+    }
+}
