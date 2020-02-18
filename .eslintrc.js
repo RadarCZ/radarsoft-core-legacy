@@ -22,12 +22,6 @@ module.exports = {
     ],
     "rules": {
         "@typescript-eslint/array-type": "error",
-        "@typescript-eslint/explicit-member-accessibility": [
-            "error",
-            {
-                "accessibility": "explicit"
-            }
-        ],
         "@typescript-eslint/member-delimiter-style": [
             "error",
             {

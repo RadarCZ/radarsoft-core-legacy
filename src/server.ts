@@ -5,16 +5,19 @@ import Handlers from './twitch/handlers';
 import TwitchClient from './twitch/TwitchClient';
 import TwitchOptions from './twitch/TwitchOptions';
 import NCovTracker from './util/2019nCov';
+
 import axios from 'axios';
+import { createConnection } from 'typeorm';
 
 const server = app.listen(app.get('port'), () => {
-  logger.info(`App is running at http://localhost:${app.get('port')} in ${app.get('env')} mode`);
+  createConnection().then(() => {
+    logger.info(`App is running at http://localhost:${app.get('port')} in ${app.get('env')} mode`);
 
   handlePost();
 
   const nCov = new NCovTracker();
   const nCovReport = (): void => {
-    nCov.report().catch(_ => {
+    nCov.report().catch(() => {
       logger.error('2019-nCov report failed');
     });
   };
@@ -49,6 +52,7 @@ const server = app.listen(app.get('port'), () => {
     }
 
   logger.info('Press CTRL-C to stop');
+  });
 });
 
 export default server;

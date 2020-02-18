@@ -1,11 +1,11 @@
-import fs from 'fs';
-import path from 'path';
 import url from 'url';
 
+import { QueueEntry } from '../../entity/QueueEntry';
 import { logger } from '../../config/winston';
 import { IRadarsoftHandler } from '../IRadarsoftHandler';
+import { getConnection } from 'typeorm';
 
-export const queue: IRadarsoftHandler = (req, res) => {
+export const queue: IRadarsoftHandler = async (req, res) => {
   if (req.params.botToken !== process.env.TG_BOT_TOKEN) {
     res.sendStatus(401);
 
@@ -30,35 +30,21 @@ export const queue: IRadarsoftHandler = (req, res) => {
     return;
   }
 
-  const saveObject = {
-    fullLink,
-    artistLink,
-    postLink,
-    'postName': req.body.postName,
-    origin,
-    postId,
-    'tgImageLink': (req.body.tgImageLink || fullLink),
-    'tipLink' : req.body.tipLink
-  };
-
-  const queueDirectory = path.join(process.cwd(), 'data/telegram/queue');
-  const postedDirectory = path.join(process.cwd(), 'data/telegram/posted');
-  const queueFilePath = path.join(queueDirectory, `${origin}_${postId}.json`);
-  const postedFilePath = path.join(postedDirectory, `${origin}_${postId}.json`);
-
-  if (!fs.existsSync(queueDirectory)) {
-    fs.mkdirSync(queueDirectory, { 'recursive': true });
-  }
-
-  if (!fs.existsSync(postedDirectory)) {
-    fs.mkdirSync(postedDirectory, { 'recursive': true });
-  }
-
-  if (!fs.existsSync(postedFilePath)) {
-    fs.writeFileSync(queueFilePath, JSON.stringify(saveObject));
-  } else {
-    logger.info('Image was already posted.');
-  }
+  await getConnection()
+    .createQueryBuilder()
+    .insert()
+    .into(QueueEntry)
+    .values({
+      fullLink,
+      artistLink,
+      postLink,
+      'postName': req.body.postName,
+      origin,
+      postId,
+      'tgImageLink': (req.body.tgImageLink || fullLink),
+      'tipLink' : req.body.tipLink,
+    })
+    .execute();
 
   logger.info(`Queue for post '${postId}' handled.`);
   res.status(200).end();

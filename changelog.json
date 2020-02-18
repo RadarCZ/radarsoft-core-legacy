@@ -1,4 +1,9 @@
 {
+    "2.1.0": {
+        "Telegram bot": [
+            "New queue entries will be saved into the DB instead of file system."
+        ]
+    },
     "2.0.0": {
         "Whole project": [
             "Moved from tslint to eslint",
