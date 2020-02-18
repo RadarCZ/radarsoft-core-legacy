@@ -43,7 +43,9 @@ export const queue: IRadarsoftHandler = async (req, res) => {
       postId,
       'tgImageLink': (req.body.tgImageLink || fullLink),
       'tipLink' : req.body.tipLink,
+      'postOriginIdComb': `${origin}_${postId}`
     })
+    .onConflict('("postOriginIdComb") DO NOTHING')
     .execute();
 
   logger.info(`Queue for post '${postId}' handled.`);

@@ -1,4 +1,9 @@
 {
+    "2.1.1": {
+        "Telegram bot": [
+            "Added onConflict handler"
+        ]
+    },
     "2.1.0": {
         "Telegram bot": [
             "New queue entries will be saved into the DB instead of file system."

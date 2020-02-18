@@ -12,15 +12,18 @@ export class QueueEntry {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()
-    postId!: number;
-
     @Column({
         'type': 'enum',
         'enum': QueueEntryOrigin,
         'default': QueueEntryOrigin.FA
     })
     origin!: QueueEntryOrigin;
+
+    @Column()
+    postId!: number;
+
+    @Column({ 'unique': true })
+    postOriginIdComb!: string;
 
     @Column()
     postLink!: string;
