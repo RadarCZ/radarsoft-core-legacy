@@ -64,3 +64,4 @@ typings/
 /dist
 *.ini
 /data
+ormconfig.json
