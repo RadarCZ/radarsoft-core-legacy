@@ -3,6 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 enum QueueEntryOrigin {
     FA = 'FA',
     WS = 'WS',
+    WE = 'WE',
     SF = 'SF',
     E6 = 'E6'
 }

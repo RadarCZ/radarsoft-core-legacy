@@ -1,4 +1,9 @@
 {
+    "2.1.2": {
+        "Telegram bot": [
+            "Completed migration of bot to database"
+        ]
+    },
     "2.1.1": {
         "Telegram bot": [
             "Added onConflict handler"

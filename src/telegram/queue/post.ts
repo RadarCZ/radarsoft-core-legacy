@@ -1,12 +1,13 @@
-import fs from 'fs';
 import path from 'path';
 import { getRandomNumber } from '../../util/misc';
+import { QueueEntry } from '../../entity/QueueEntry';
 import moment, { Moment } from 'moment-timezone';
 import axios from 'axios';
+import { getConnection } from 'typeorm';
 
 export const postToChannel:
-  (channelId: string, postFile: string, nextPostTime: Moment, filesCount: number) => Promise<boolean | Error>
-  = async (channelId, postFile, nextPostTime, filesCount) => {
+  (channelId: string, postId: number, nextPostTime: Moment, queueLength: number) => Promise<boolean | Error>
+  = async (channelId, postId, nextPostTime, queueLength) => {
   const data: object = {
     'chat_id': channelId,
   };
@@ -14,16 +15,15 @@ export const postToChannel:
   const random = getRandomNumber(`${+moment()}`, 100);
   const kofi = random > 95;
 
-  const queueFilePath = path.join(process.cwd(), 'data/telegram/queue', postFile);
-  const postedFilePath = path.join(process.cwd(), 'data/telegram/posted', postFile);
+  const queueEntry: QueueEntry | undefined = await getConnection()
+    .createQueryBuilder()
+    .select('queue_entry')
+    .from<QueueEntry>(QueueEntry, 'queue_entry')
+    .where('queue_entry.postId = :postId', { postId })
+    .getOne();
 
-  const pjsonPath = path.join(process.cwd(), 'package.json');
-  const pjsonRaw = fs.readFileSync(pjsonPath, { 'encoding': 'utf8' });
-  const { version } = JSON.parse(pjsonRaw);
-
-  if (fs.existsSync(queueFilePath)) {
-    const rawData = fs.readFileSync(queueFilePath, { 'encoding': 'utf8' });
-    const { fullLink, artistLink, postLink, postName, tgImageLink, tipLink } = JSON.parse(rawData);
+  if (queueEntry) {
+    const { fullLink, artistLink, postLink, postName, tgImageLink, tipLink } = queueEntry;
     const postNameEscaped = (!!postName) ? postName.replace(/</g, '&lt;').replace(/>/g, '&gt;') : postLink;
     const sendType = path.extname(fullLink) === '.gif' ? 'Document' : 'Photo';
     const dataSendType = {
@@ -38,9 +38,8 @@ export const postToChannel:
       ]
     };
     data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n\n`;
-    data['caption'] += `<code>Radar\'s Butt 2.0</code> <i>(api: ${version})</i>\n`;
     data['caption'] += `Next post at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`;
-    data['caption'] += `Submissions in queue: ${filesCount - 1}\n`;
+    data['caption'] += `Submissions in queue: ${queueLength - 1}\n`;
 
     if (tipLink) {
       data['caption'] += `\n\n<a href="${tipLink}">Tip the artist!</a>`;
@@ -55,8 +54,14 @@ export const postToChannel:
       const postResult =
         await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/send${sendType}`, data);
       if (postResult.status === 200) {
-        fs.writeFileSync(postedFilePath, rawData);
-        fs.unlinkSync(queueFilePath);
+        await getConnection()
+          .createQueryBuilder()
+          .update(QueueEntry)
+          .set({
+            'posted': true
+          })
+          .where('postId = :postId', { postId })
+          .execute();
 
         return Promise.resolve(true);
       }
@@ -69,9 +74,8 @@ export const postToChannel:
         };
 
         failedData['text'] = `<a href="${postLink}">${postNameEscaped}</a>\n\n`;
-        failedData['text'] += `<code>Radar\'s Butt 2.0</code> <i>(api: ${version})</i>\n`;
         failedData['text'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`;
-        failedData['text'] += `Submissions in queue: ${filesCount - 1}\n`;
+        failedData['text'] += `Submissions in queue: ${queueLength - 1}\n`;
 
         if (kofi) {
           failedData['text'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>';
@@ -79,8 +83,14 @@ export const postToChannel:
         const postResult =
           await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, failedData);
         if (postResult.status === 200) {
-          fs.writeFileSync(postedFilePath, rawData);
-          fs.unlinkSync(queueFilePath);
+          await getConnection()
+          .createQueryBuilder()
+          .update(QueueEntry)
+          .set({
+            'posted': true
+          })
+          .where('queue_entry.postId = :postId', { postId })
+          .execute();
         }
 
         return Promise.resolve(true);
@@ -90,5 +100,5 @@ export const postToChannel:
     }
   }
 
-  return new URIError(`File '${postFile}' does not exist`);
+  return new Error(`There's no post with id '${postId}'`);
 };

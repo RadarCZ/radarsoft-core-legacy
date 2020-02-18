@@ -1,41 +1,46 @@
-import fs from 'fs';
-import path from 'path';
 import { logger } from '../../config/winston';
 import { getRandomNumber } from '../../util/misc';
+import { QueueEntry } from '../../entity/QueueEntry';
+import { QueuePostTime } from '../../entity/QueuePostTime';
 import { postToChannel } from './post';
 import moment, { Moment } from 'moment-timezone';
+import { getConnection, getRepository } from 'typeorm';
 
 export const handlePost: () => void = async () => {
-  const queueNextPostTimeFile = path.join(process.cwd(), 'data/telegram/queue/.data.json');
-  const queueFolder = path.join(process.cwd(), 'data/telegram/queue');
+  const queuePostTime: QueuePostTime | undefined = await getConnection()
+    .createQueryBuilder()
+    .select('queue_post_time')
+    .from<QueuePostTime>(QueuePostTime, 'queue_post_time')
+    .getOne();
+
   const currentTime = moment.tz('Europe/Prague');
   let lastPostTime: Moment = currentTime;
 
-  if (fs.existsSync(queueNextPostTimeFile)) {
-    const rawData = fs.readFileSync(queueNextPostTimeFile, 'utf8');
-    const jsonData = JSON.parse(rawData);
-    lastPostTime = moment.tz(jsonData.nextPost, 'Europe/Prague');
+  if (queuePostTime) {
+    lastPostTime = moment.tz(queuePostTime.nextPostDatetime, 'Europe/Prague');
   }
 
   let nextPostMilliseconds = 0;
 
   if (lastPostTime.isSameOrBefore(currentTime)) {
-    let allFiles: fs.Dirent[] = [];
-    if (fs.existsSync(queueFolder)) {
-      allFiles = fs.readdirSync(queueFolder, { 'withFileTypes': true }).filter(fsEntry => {
-        return (!fsEntry.name.startsWith('.') && fsEntry.isFile());
-      });
-    }
+    const queueEntriesAndCount: [QueueEntry[], number] = await getConnection()
+      .createQueryBuilder()
+      .select('queue_entry')
+      .from<QueueEntry>(QueueEntry, 'queue_entry')
+      .where('queue_entry.posted = false')
+      .getManyAndCount();
 
-    if (allFiles.length < 1) {
+    const queueEntries = queueEntriesAndCount[0];
+    const queueLength = queueEntriesAndCount[1];
+    if (queueLength < 1) {
       logger.info('Nothing to post, waiting 1 minute.');
       setTimeout(handlePost, 60000);
 
       return;
     }
 
-    const availableOrigins: string[] = allFiles.reduce((origins, file) => {
-      const origin = file.name.substring(0, 2);
+    const availableOrigins: string[] = queueEntries.reduce((origins, entry) => {
+      const origin = entry.origin;
       if (origins.includes(origin)) {
         return origins;
       }
@@ -59,29 +64,22 @@ export const handlePost: () => void = async () => {
       chanceMax += chanceMin;
     }
 
-    const applicableFiles: fs.Dirent[] = allFiles.filter(file => file.name.startsWith(chosenOrigin));
-    const applicableFileIds: number[] = applicableFiles.map(file => {
-      const fileName = file.name;
-      const idString = fileName.substring(fileName.lastIndexOf('_') + 1, fileName.lastIndexOf('.'));
+    const applicableEntries: QueueEntry[] = queueEntries.filter(entry => entry.origin === chosenOrigin);
+    const applicablePostIds: number[] = applicableEntries.map(entry => entry.postId);
 
-      return parseInt(idString, 10);
-    });
+    const postIdToBePosted = Math.min(...applicablePostIds);
 
-    const idToBePosted = Math.min(...applicableFileIds);
-    const chosenFile = allFiles.find(file => file.name === `${chosenOrigin}_${idToBePosted}.json`);
-
-    if (!chosenFile) {
+    if (!postIdToBePosted) {
       logger.info('Bot made fucky wucky uwu Twying in wone minwute 0w0');
       setTimeout(handlePost, 60000);
 
       return;
     }
 
-    const filesCount = allFiles.length;
-    const newInterval: number = generateInterval(filesCount);
+    const newInterval: number = generateInterval(queueLength);
     const nextPostTime: Moment = moment(currentTime).add(newInterval, 'm');
     const postResult: boolean | Error =
-      await postToChannel(`${process.env.TG_MAIN_CHANNEL_ID}`, chosenFile.name, nextPostTime, filesCount);
+      await postToChannel(`${process.env.TG_MAIN_CHANNEL_ID}`, postIdToBePosted, nextPostTime, queueLength);
     nextPostMilliseconds = newInterval * 60 * 1000;
     if (postResult === true) {
       logger.info(`Post successful. Next post in ${newInterval} minutes.`);
@@ -93,10 +91,13 @@ export const handlePost: () => void = async () => {
       }
     }
 
-    const writeData = {
-      'nextPost': nextPostTime.format()
+    const newPostTime: QueuePostTime = {
+      'id': 1,
+      'nextPostDatetime': nextPostTime.toISOString(true)
     };
-    fs.writeFileSync(queueNextPostTimeFile, JSON.stringify(writeData));
+
+    const postTimeRepository = getRepository(QueuePostTime);
+    await postTimeRepository.save<QueuePostTime>(newPostTime);
 
   } else {
     nextPostMilliseconds = lastPostTime.diff(currentTime);
