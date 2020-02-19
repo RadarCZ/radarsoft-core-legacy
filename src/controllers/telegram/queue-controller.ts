@@ -2,6 +2,7 @@ import url from 'url';
 
 import { QueueEntry } from '../../entity/QueueEntry';
 import { logger } from '../../config/winston';
+import { getPackageJsonVersion } from '../../util/misc';
 import { IRadarsoftHandler } from '../IRadarsoftHandler';
 import { getConnection } from 'typeorm';
 
@@ -43,7 +44,8 @@ export const queue: IRadarsoftHandler = async (req, res) => {
       postId,
       'tgImageLink': (req.body.tgImageLink || fullLink),
       'tipLink' : req.body.tipLink,
-      'postOriginIdComb': `${origin}_${postId}`
+      'postOriginIdComb': `${origin}_${postId}`,
+      'savedWithApiVer': getPackageJsonVersion()
     })
     .onConflict('("postOriginIdComb") DO NOTHING')
     .execute();

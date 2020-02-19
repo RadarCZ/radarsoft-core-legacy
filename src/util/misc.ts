@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import { default as seedRandom } from 'seedrandom';
 
 export const getAllowedKeys: (keys: string[], object: any, remove: boolean) => string[] = (keys, object, remove) => {
@@ -22,4 +24,12 @@ export const getRandomNumber: (seed: string, max: number) => number = (seed, max
   const rng = seedRandom(seed);
 
   return Math.floor(rng() * Math.floor(max));
+};
+
+export const getPackageJsonVersion: () => string = () => {
+  const pjsonPath = path.join(process.cwd(), 'package.json');
+  const pjsonRaw = fs.readFileSync(pjsonPath, { 'encoding': 'utf8' });
+  const { version } = JSON.parse(pjsonRaw);
+
+  return version;
 };

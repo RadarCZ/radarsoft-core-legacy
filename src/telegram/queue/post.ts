@@ -1,5 +1,5 @@
 import path from 'path';
-import { getRandomNumber } from '../../util/misc';
+import { getRandomNumber, getPackageJsonVersion } from '../../util/misc';
 import { QueueEntry } from '../../entity/QueueEntry';
 import moment, { Moment } from 'moment-timezone';
 import axios from 'axios';
@@ -23,6 +23,8 @@ export const postToChannel:
     .getOne();
 
   if (queueEntry) {
+    const currentVersion = getPackageJsonVersion();
+    const savedWithVersion = queueEntry.savedWithApiVer || '2.1.2';
     const { fullLink, artistLink, postLink, postName, tgImageLink, tipLink } = queueEntry;
     const postNameEscaped = (!!postName) ? postName.replace(/</g, '&lt;').replace(/>/g, '&gt;') : postLink;
     const sendType = path.extname(fullLink) === '.gif' ? 'Document' : 'Photo';
@@ -42,12 +44,14 @@ export const postToChannel:
     data['caption'] += `Submissions in queue: ${queueLength - 1}\n`;
 
     if (tipLink) {
-      data['caption'] += `\n\n<a href="${tipLink}">Tip the artist!</a>`;
+      data['caption'] += `\n\n<a href="${tipLink}">Tip the artist!</a>\n`;
     }
 
     if (!tipLink && kofi) {
-      data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>';
+      data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
     }
+    data['caption'] += `<i>Saved to queue with API v${savedWithVersion}</i>\n`;
+    data['caption'] += `<i>Current API version: ${currentVersion}</i>\n`;
     data['parse_mode'] = 'HTML';
 
     try {
@@ -77,9 +81,16 @@ export const postToChannel:
         failedData['text'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`;
         failedData['text'] += `Submissions in queue: ${queueLength - 1}\n`;
 
-        if (kofi) {
-          failedData['text'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support Me on Ko-fi</a>';
+        if (tipLink) {
+          failedData['text'] += `\n\n<a href="${tipLink}">Tip the artist!</a>\n`;
         }
+
+        if (!tipLink && kofi) {
+          failedData['text'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
+        }
+
+        failedData['text'] += `<i>Saved to queue with API v${savedWithVersion}</i>\n`;
+        failedData['text'] += `<i>Current API version: ${currentVersion}</i>\n`;
         const postResult =
           await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, failedData);
         if (postResult.status === 200) {

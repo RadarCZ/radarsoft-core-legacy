@@ -1,4 +1,9 @@
 {
+    "2.1.3": {
+        "Telegram bot": [
+            "Returned the version reporting."
+        ]
+    },
     "2.1.2": {
         "Telegram bot": [
             "Completed migration of bot to database"

@@ -1,12 +1,5 @@
+import { QueueEntryOrigin } from '../util/enums';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
-enum QueueEntryOrigin {
-    FA = 'FA',
-    WS = 'WS',
-    WE = 'WE',
-    SF = 'SF',
-    E6 = 'E6'
-}
 
 @Entity()
 export class QueueEntry {
@@ -37,6 +30,9 @@ export class QueueEntry {
 
     @Column()
     tgImageLink!: string;
+
+    @Column({ 'default': '2.1.2' })
+    savedWithApiVer!: string;
 
     @Column({ 'default': false })
     posted!: boolean;
