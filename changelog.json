@@ -1,4 +1,11 @@
 {
+    "2.2.0": {
+        "2019nCov Utility": [
+            "Renamed",
+            "Added caching to database for difference calculation",
+            "Added as a cron job with more consistent posting times"
+        ]
+    },
     "2.1.3": {
         "Telegram bot": [
             "Returned the version reporting."

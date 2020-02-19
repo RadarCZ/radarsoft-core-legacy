@@ -1,9 +1,10 @@
 import { logger } from '../config/winston';
-import NCovStats from './structs/nCovStats';
+import { WuhanTracker } from '../entity/WuhanTracker';
 import TelegramChatData from './structs/telegramChatData';
-import { NCovStatType } from './enums';
-import applyConverters from 'axios-case-converter';
+import { NCovStatType, TelegramParseMode } from './enums';
+import applyConverters from 'axios-case-converter-updated';
 import axios from 'axios';
+import { getConnection, getRepository } from 'typeorm';
 
 export default class NCovTracker {
     private urlConfirmed: string;
@@ -18,7 +19,7 @@ export default class NCovTracker {
 
     public async report(): Promise<boolean> {
         if (!process.env.TG_BOT_TOKEN) {
-            logger.warn('Skipping 2019-nCov update, no Telegram token (TG_BOT_TOKEN)');
+            logger.warn('Skipping Covid19 update, no Telegram token (TG_BOT_TOKEN)');
 
             return false;
         }
@@ -27,20 +28,47 @@ export default class NCovTracker {
         const deathsResponse = await axios.get(this.urlDeaths);
         const recoveredResponse = await axios.get(this.urlRecovered);
 
-        const finalResults = new NCovStats(
-            confirmedResponse.data.features[0].attributes.value,
-            deathsResponse.data.features[0].attributes.value,
-            recoveredResponse.data.features[0].attributes.value
-        );
+        const finalResult: WuhanTracker = {
+            'id': 1,
+            'confirmed': parseInt(confirmedResponse.data.features[0].attributes.value, 10),
+            'deaths': parseInt(deathsResponse.data.features[0].attributes.value, 10),
+            'recovered': parseInt(recoveredResponse.data.features[0].attributes.value, 10)
+        };
+
+        const oldResult: WuhanTracker | undefined = await getConnection()
+            .createQueryBuilder()
+            .select('wuhan_tracker')
+            .from<WuhanTracker>(WuhanTracker, 'wuhan_tracker')
+            .getOne();
+
+        let confirmedString = '';
+        let deathsString = '';
+        let recoveredString = '';
+
+        if (oldResult) {
+            const confirmedPercentage = ((finalResult.confirmed - oldResult.confirmed) / (finalResult.confirmed)) * 100;
+            const deathsPercentage = ((finalResult.deaths - oldResult.deaths) / (finalResult.deaths)) * 100;
+            const recoveredPercentage = ((finalResult.recovered - oldResult.recovered) / (finalResult.recovered)) * 100;
+            confirmedString = ` Confirmed: ${finalResult.confirmed} (${confirmedPercentage > 0 ? '+' : ''} ${confirmedPercentage.toFixed(4)} %)`;
+            deathsString = ` Deaths: ${finalResult.deaths} (${deathsPercentage > 0 ? '+' : ''} ${deathsPercentage.toFixed(4)} %)`;
+            recoveredString = ` Recovered: ${finalResult.recovered} (${recoveredPercentage > 0 ? '+' : ''} ${recoveredPercentage.toFixed(4)} %)`;
+        } else {
+            confirmedString = ` Confirmed: ${finalResult.confirmed}`;
+            deathsString = ` Deaths: ${finalResult.deaths}`;
+            recoveredString = ` Recovered: ${finalResult.recovered}`;
+        }
 
         const telegramData = new TelegramChatData(
             parseInt(`${process.env.TG_HOOSKWOOF_UPDATES_ID}`, 10),
-            `<b>2019-nCoV status report</b>\n Confirmed: ${finalResults.Confirmed}\n Deaths: ${finalResults.Deaths}\n Recovered: ${finalResults.Recovered}`,
-            'HTML'
+            `<b>Covid19 status report</b>\n${confirmedString}\n${deathsString}\n${recoveredString}`,
+            TelegramParseMode.HTML
         );
 
         const client = applyConverters(axios.create());
         await client.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, telegramData);
+
+        const wuhanTrackerRepository = getRepository(WuhanTracker);
+        await wuhanTrackerRepository.save<WuhanTracker>(finalResult);
 
         return true;
     }

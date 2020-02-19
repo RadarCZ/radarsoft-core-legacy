@@ -4,6 +4,12 @@ export enum NCovStatType {
     Recovered
 };
 
+export enum TelegramParseMode {
+    HTML = 'HTML',
+    Markdown = 'Markdown',
+    MarkdownV2 = 'MarkdownV2'
+};
+
 export enum QueueEntryOrigin {
     FA = 'FA',
     WS = 'WS',

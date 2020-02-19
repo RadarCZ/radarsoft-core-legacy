@@ -5,6 +5,7 @@ import Handlers from './twitch/handlers';
 import TwitchClient from './twitch/TwitchClient';
 import TwitchOptions from './twitch/TwitchOptions';
 import NCovTracker from './util/2019nCov';
+import { CronJob } from 'cron';
 
 import axios from 'axios';
 import { createConnection } from 'typeorm';
@@ -15,17 +16,15 @@ const server = app.listen(app.get('port'), () => {
 
   handlePost();
 
-  const nCov = new NCovTracker();
-  const nCovReport = (): void => {
-    nCov.report().catch(() => {
-      logger.error('2019-nCov report failed');
+  const wuhan = new NCovTracker();
+  const wuhanReport = (): void => {
+    wuhan.report().catch(() => {
+      logger.error('Covid19 report failed');
     });
   };
-  nCovReport();
-  setInterval(
-    nCovReport,
-    14400000
-  );
+
+  const job: CronJob = new CronJob('0 8-20/4 * * *', wuhanReport);
+  job.start();
 
   if (process.env.TG_BOT_TOKEN) {
     axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/setWebhook`, {

@@ -100,7 +100,7 @@ export const postToChannel:
           .set({
             'posted': true
           })
-          .where('queue_entry.postId = :postId', { postId })
+          .where('postId = :postId', { postId })
           .execute();
         }
 
