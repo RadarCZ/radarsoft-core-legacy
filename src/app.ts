@@ -3,7 +3,7 @@ import { errorLogger, requestLogger } from './util/logging';
 import { getGcData } from './controllers/contacts/geocaching-controller';
 import { getGhData } from './controllers/contacts/github-controller';
 import { processWebhook } from './controllers/telegram/webhook-processor';
-import { queue } from './controllers/telegram/queue-controller';
+import { queue, bulkFaQueue } from './controllers/telegram/queue-controller';
 import { kofiDongnation } from './controllers/dongnations/kofi-webhook';
 import { relayETSPayload } from './controllers/trucksbook/tb-webhook';
 import express, { Application } from 'express';
@@ -38,6 +38,8 @@ app.get('/api/github', getGhData);
 app.post('/api/telegram/processUpdate', processWebhook);
 
 app.post('/api/telegram/:botToken/queue', queue);
+
+app.post('/api/telegram/:botToken/bulkFaQueue', bulkFaQueue);
 
 if (process.env.USE_ERROR_LOGGING) {
     app.use(errorLogger);

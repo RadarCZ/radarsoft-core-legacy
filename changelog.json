@@ -1,4 +1,9 @@
 {
+    "2.3.0": {
+        "Telegram bot": [
+            "Added furaffinity-api and bulk processing of FA entries"
+        ]
+    },
     "2.2.0": {
         "2019nCov Utility": [
             "Renamed",

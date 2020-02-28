@@ -1,6 +1,7 @@
 import path from 'path';
 import { getRandomNumber, getPackageJsonVersion } from '../../util/misc';
 import { QueueEntry } from '../../entity/QueueEntry';
+import { logger } from '../../config/winston';
 import moment, { Moment } from 'moment-timezone';
 import axios from 'axios';
 import { getConnection } from 'typeorm';
@@ -15,6 +16,7 @@ export const postToChannel:
   const random = getRandomNumber(`${+moment()}`, 100);
   const kofi = random > 95;
 
+  logger.info(`Trying to post entry with postId == ${postId}`);
   const queueEntry: QueueEntry | undefined = await getConnection()
     .createQueryBuilder()
     .select('queue_entry')
