@@ -113,7 +113,7 @@ export const bulkFaQueue: IRadarsoftHandler = async (req, res) => {
         newEntry.artistLink = `http://furaffinity.net/user/${submission.author.id}`;
         newEntry.fullLink = submission.downloadUrl;
         newEntry.postOriginIdComb = `FA_${postIds[i]}`;
-        newEntry.savedWithApiVer = getPackageJsonVersion();
+        newEntry.savedWithApiVer = `${getPackageJsonVersion()}-bulk`;
         newEntry.postName = submission.title;
         newEntry.posted = false;
         newEntry.tgImageLink = submission.downloadUrl;

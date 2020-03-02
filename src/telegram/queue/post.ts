@@ -1,5 +1,5 @@
 import path from 'path';
-import { getRandomNumber, getPackageJsonVersion } from '../../util/misc';
+import { getRandomNumber } from '../../util/misc';
 import { QueueEntry } from '../../entity/QueueEntry';
 import { logger } from '../../config/winston';
 import moment, { Moment } from 'moment-timezone';
@@ -25,14 +25,12 @@ export const postToChannel:
     .getOne();
 
   if (queueEntry) {
-    const currentVersion = getPackageJsonVersion();
-    const savedWithVersion = queueEntry.savedWithApiVer || '2.1.2';
-    const { fullLink, artistLink, postLink, postName, tgImageLink, tipLink } = queueEntry;
+    const { fullLink, artistLink, postLink, postName, tipLink } = queueEntry;
     const postNameEscaped = (!!postName) ? postName.replace(/</g, '&lt;').replace(/>/g, '&gt;') : postLink;
     const sendType = path.extname(fullLink) === '.gif' ? 'Document' : 'Photo';
     const dataSendType = {
       'Document': encodeURI(fullLink),
-      'Photo': encodeURI(tgImageLink || fullLink)
+      'Photo': encodeURI(fullLink)
     };
 
     data[sendType.toLowerCase()] = dataSendType[sendType];
@@ -42,8 +40,7 @@ export const postToChannel:
       ]
     };
     data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n\n`;
-    data['caption'] += `Next post at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`;
-    data['caption'] += `Submissions in queue: ${queueLength - 1}\n`;
+    logger.info(`Submissions in queue: ${queueLength - 1}\n`);
 
     if (tipLink) {
       data['caption'] += `\n\n<a href="${tipLink}">Tip the artist!</a>\n`;
@@ -52,8 +49,6 @@ export const postToChannel:
     if (!tipLink && kofi) {
       data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
     }
-    data['caption'] += `<i>Saved to queue with API v${savedWithVersion}</i>\n`;
-    data['caption'] += `<i>Current API version: ${currentVersion}</i>\n`;
     data['parse_mode'] = 'HTML';
 
     try {
@@ -80,8 +75,7 @@ export const postToChannel:
         };
 
         failedData['text'] = `<a href="${postLink}">${postNameEscaped}</a>\n\n`;
-        failedData['text'] += `Post failed. Next at ${nextPostTime.format('LT')} (${nextPostTime.zoneAbbr()}).\n`;
-        failedData['text'] += `Submissions in queue: ${queueLength - 1}\n`;
+        failedData['text'] += 'Image too big or FA down again. Click the above link to see the image.';
 
         if (tipLink) {
           failedData['text'] += `\n\n<a href="${tipLink}">Tip the artist!</a>\n`;
@@ -91,8 +85,6 @@ export const postToChannel:
           failedData['text'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
         }
 
-        failedData['text'] += `<i>Saved to queue with API v${savedWithVersion}</i>\n`;
-        failedData['text'] += `<i>Current API version: ${currentVersion}</i>\n`;
         const postResult =
           await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, failedData);
         if (postResult.status === 200) {

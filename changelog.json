@@ -1,4 +1,10 @@
 {
+    "2.3.1": {
+        "Telegram bot": [
+            "Removed a lot of unnecessary text",
+            "Changed post image link to be the original link again"
+        ]
+    },
     "2.3.0": {
         "Telegram bot": [
             "Added furaffinity-api and bulk processing of FA entries"
