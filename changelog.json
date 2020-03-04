@@ -1,4 +1,10 @@
 {
+    "2.3.2": {
+        "Telegram bot": [
+            "Removed even more unnecessary text (empty lines)",
+            "Change posting interval from random to every 15th minute in an hour (0, 15, 30, 45)"
+        ]
+    },
     "2.3.1": {
         "Telegram bot": [
             "Removed a lot of unnecessary text",

@@ -2,13 +2,13 @@ import path from 'path';
 import { getRandomNumber } from '../../util/misc';
 import { QueueEntry } from '../../entity/QueueEntry';
 import { logger } from '../../config/winston';
-import moment, { Moment } from 'moment-timezone';
+import moment from 'moment-timezone';
 import axios from 'axios';
 import { getConnection } from 'typeorm';
 
 export const postToChannel:
-  (channelId: string, postId: number, nextPostTime: Moment, queueLength: number) => Promise<boolean | Error>
-  = async (channelId, postId, nextPostTime, queueLength) => {
+  (channelId: string, postId: number, queueLength: number) => Promise<boolean | Error>
+  = async (channelId, postId, queueLength) => {
   const data: object = {
     'chat_id': channelId,
   };
@@ -39,15 +39,15 @@ export const postToChannel:
         [{ 'text': 'Full res', 'url': encodeURI(fullLink)}, { 'text': 'Poster\'s profile', 'url': artistLink}]
       ]
     };
-    data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n\n`;
+    data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n`;
     logger.info(`Submissions in queue: ${queueLength - 1}\n`);
 
     if (tipLink) {
-      data['caption'] += `\n\n<a href="${tipLink}">Tip the artist!</a>\n`;
+      data['caption'] += `<a href="${tipLink}">Tip the artist!</a>\n`;
     }
 
     if (!tipLink && kofi) {
-      data['caption'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
+      data['caption'] += '<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
     }
     data['parse_mode'] = 'HTML';
 
@@ -74,15 +74,15 @@ export const postToChannel:
           'reply_markup': data['reply_markup']
         };
 
-        failedData['text'] = `<a href="${postLink}">${postNameEscaped}</a>\n\n`;
-        failedData['text'] += 'Image too big or FA down again. Click the above link to see the image.';
+        failedData['text'] = `<a href="${postLink}">${postNameEscaped}</a>\n`;
+        failedData['text'] += 'Image too big or FA down again. Click the above link to see the image.\n';
 
         if (tipLink) {
-          failedData['text'] += `\n\n<a href="${tipLink}">Tip the artist!</a>\n`;
+          failedData['text'] += `<a href="${tipLink}">Tip the artist!</a>\n`;
         }
 
         if (!tipLink && kofi) {
-          failedData['text'] += '\n\n<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
+          failedData['text'] += '<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
         }
 
         const postResult =
