@@ -1,4 +1,12 @@
 {
+    "2.3.4": {
+        "General": [
+            "Added info link to README"
+        ],
+        "Wuhan Tracker": [
+            "Added posting the info to the info channel. Post frequency is every 4th hour from 8AM to 8PM CET (both included)."
+        ]
+    },
     "2.3.3": {
         "General": [
             "Updated and fixed dependencies",
