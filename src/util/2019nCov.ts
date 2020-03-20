@@ -64,15 +64,16 @@ export default class NCovTracker {
             TelegramParseMode.HTML
         );
 
-        const infoTelegramData = new TelegramChatData(
-            parseInt(`${process.env.TG_INFO_CHANNEL_ID}`, 10),
-            `<b>Covid19 status report</b>\n${confirmedString}\n${deathsString}\n${recoveredString}`,
-            TelegramParseMode.HTML
-        );
-
         const client = applyConverters(axios.create());
         await client.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, telegramData);
-        await client.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, infoTelegramData);
+
+
+        const infoTelegramData = {
+            'chat_id': `${process.env.TG_INFO_CHANNEL_ID}`,
+            'text': `<b>Covid19 status report</b>\n${confirmedString}\n${deathsString}\n${recoveredString}`,
+            'parse_mode': 'HTML'
+        };
+        await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, infoTelegramData);
 
         const wuhanTrackerRepository = getRepository(WuhanTracker);
         await wuhanTrackerRepository.save<WuhanTracker>(finalResult);

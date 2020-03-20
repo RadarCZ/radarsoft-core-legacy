@@ -1,12 +1,12 @@
 import { TelegramParseMode } from '../enums';
 
 export default class TelegramChatData {
-    public ChatId: number;
+    public ChatId: number | string;
     public Text: string;
     public ParseMode: TelegramParseMode;
 
     public constructor (
-        chatId: number,
+        chatId: number | string,
         text: string,
         parseMode: TelegramParseMode
     ) {

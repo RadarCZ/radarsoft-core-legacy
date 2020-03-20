@@ -1,4 +1,9 @@
 {
+    "2.3.5": {
+        "Telegram bot - Info Channel": [
+            "Added pinning of changelog messages"
+        ]
+    },
     "2.3.4": {
         "General": [
             "Added info link to README"

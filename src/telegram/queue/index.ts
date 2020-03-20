@@ -111,7 +111,14 @@ export const handleNewVersionStartup: () => void = async () => {
     changelogPostData['text'] += '\n';
   }
 
-  await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, changelogPostData);
+  const postResult = await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, changelogPostData);
+
+  const pinData = {
+    'chat_id': changelogPostData['chat_id']
+  };
+  pinData['message_id'] = postResult?.data?.result['message_id'];
+
+  await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/pinChatMessage`, pinData);
 
   const changelogPostRepository = getRepository(ChangelogPosts);
   await changelogPostRepository.save<ChangelogPosts>(newChangelogPost);
