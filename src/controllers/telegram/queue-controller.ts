@@ -4,8 +4,8 @@ import { logger } from '../../config/winston';
 import { getPackageJsonVersion } from '../../util/misc';
 import { QueueEntryOrigin } from '../../util/enums';
 import { IRadarsoftHandler } from '../IRadarsoftHandler';
-import { Login, Submission } from 'furaffinity-api';
-import { Submission as SubmissionType } from 'furaffinity-api/dist/interfaces';
+import { Login, Submission } from 'radars-furaffinity-api';
+import { Submission as SubmissionType } from 'radars-furaffinity-api/dist/interfaces';
 import { getConnection, Connection } from 'typeorm';
 
 export const queue: IRadarsoftHandler = async (req, res) => {

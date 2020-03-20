@@ -1,4 +1,14 @@
 {
+    "2.3.3": {
+        "General": [
+            "Updated and fixed dependencies",
+            "Added current version changelog posting on deploy"
+        ],
+        "Telegram bot": [
+            "Changed post frequency from 4 in an hour to 6",
+            "Added info channel with stats previously posted in the main channel"
+        ]
+    },
     "2.3.2": {
         "Telegram bot": [
             "Removed even more unnecessary text (empty lines)",

@@ -33,3 +33,13 @@ export const getPackageJsonVersion: () => string = () => {
 
   return version;
 };
+
+export const getVersionChangelog: (version: string) => object = version => {
+  const chjsonPath = path.join(process.cwd(), 'changelog.json');
+  const chjsonRaw = fs.readFileSync(chjsonPath, { 'encoding': 'utf8' });
+  const chJSON = JSON.parse(chjsonRaw);
+  const returnObject = { };
+  returnObject[version] = chJSON[version];
+
+  return returnObject;
+};

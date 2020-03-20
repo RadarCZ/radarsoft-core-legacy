@@ -1,6 +1,6 @@
 import app from './app';
 import { logger } from './config/winston';
-import { handlePost } from './telegram/queue';
+import { handlePost, handleNewVersionStartup } from './telegram/queue';
 import Handlers from './twitch/handlers';
 import TwitchClient from './twitch/TwitchClient';
 import TwitchOptions from './twitch/TwitchOptions';
@@ -14,7 +14,7 @@ const server = app.listen(app.get('port'), () => {
   createConnection().then(() => {
     logger.info(`App is running at http://localhost:${app.get('port')} in ${app.get('env')} mode`);
 
-    const postJob: CronJob = new CronJob('*/15 * * * *', handlePost);
+    const postJob: CronJob = new CronJob('*/10 * * * *', handlePost);
     postJob.start();
 
     const wuhan = new NCovTracker();
@@ -28,6 +28,7 @@ const server = app.listen(app.get('port'), () => {
     job.start();
 
     if (process.env.TG_BOT_TOKEN) {
+      handleNewVersionStartup();
       axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/setWebhook`, {
         'url' : `https://radarsoft.cz/api/telegram/processUpdate?botToken=${process.env.TG_BOT_TOKEN}`,
         'allowed_updates' : ['message']

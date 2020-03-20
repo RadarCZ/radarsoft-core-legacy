@@ -1,9 +1,9 @@
 import path from 'path';
-import { getRandomNumber } from '../../util/misc';
+import { getRandomNumber, getPackageJsonVersion } from '../../util/misc';
 import { QueueEntry } from '../../entity/QueueEntry';
 import { logger } from '../../config/winston';
 import moment from 'moment-timezone';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { getConnection } from 'typeorm';
 
 export const postToChannel:
@@ -51,8 +51,9 @@ export const postToChannel:
     }
     data['parse_mode'] = 'HTML';
 
+    let postResult!: AxiosResponse;
     try {
-      const postResult =
+      postResult =
         await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/send${sendType}`, data);
       if (postResult.status === 200) {
         await getConnection()
@@ -63,8 +64,6 @@ export const postToChannel:
           })
           .where('postId = :postId', { postId })
           .execute();
-
-        return Promise.resolve(true);
       }
     } catch (error) {
       if (error.response.data.error_code >= 400 && error.response.data.error_code < 500) {
@@ -85,7 +84,7 @@ export const postToChannel:
           failedData['text'] += '<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
         }
 
-        const postResult =
+        postResult =
           await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, failedData);
         if (postResult.status === 200) {
           await getConnection()
@@ -97,12 +96,30 @@ export const postToChannel:
           .where('postId = :postId', { postId })
           .execute();
         }
-
-        return Promise.resolve(true);
       }
+    } finally {
+      if (postResult?.data?.ok) {
+        const queueEntriesAndCount: [QueueEntry[], number] = await getConnection()
+          .createQueryBuilder()
+          .select('queue_entry')
+          .from<QueueEntry>(QueueEntry, 'queue_entry')
+          .where('queue_entry.posted = false')
+          .getManyAndCount();
 
-      return Promise.resolve(error);
+        const infoData = {
+          'chat_id': `${process.env.TG_INFO_CHANNEL_ID}`,
+          'parse_mode': 'HTML'
+        };
+
+        infoData['text'] = `<a href="https://t.me/RadarsPronz/${postResult.data.result.message_id}">New post in Radar\'s Image Stash</a>!\n`;
+        infoData['text'] += `Submissions in queue: ${queueEntriesAndCount[1]}\n\n`;
+        infoData['text'] += `<i>Saved with API v${queueEntry.savedWithApiVer}</i>\n`;
+        infoData['text'] += `<i>Current API version: ${getPackageJsonVersion()}</i>`;
+        await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, infoData);
+      }
     }
+
+    return true;
   }
 
   return new Error(`There's no post with id '${postId}'`);

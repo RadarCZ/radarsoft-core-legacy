@@ -1,9 +1,11 @@
 import { logger } from '../../config/winston';
-import { getRandomNumber } from '../../util/misc';
+import { getRandomNumber, getPackageJsonVersion, getVersionChangelog } from '../../util/misc';
+import { ChangelogPosts } from '../../entity/ChangelogPosts';
 import { QueueEntry } from '../../entity/QueueEntry';
 import { postToChannel } from './post';
+import axios from 'axios';
 import moment from 'moment-timezone';
-import { getConnection } from 'typeorm';
+import { getConnection, getRepository } from 'typeorm';
 
 export const handlePost: () => void = async () => {
   const queueEntriesAndCount: [QueueEntry[], number] = await getConnection()
@@ -69,4 +71,48 @@ export const handlePost: () => void = async () => {
       logger.error(postResult as object);
     }
   }
+};
+
+export const handleNewVersionStartup: () => void = async () => {
+  const currentVer = getPackageJsonVersion();
+  const lastChangelogPost: ChangelogPosts | undefined = await getConnection()
+    .createQueryBuilder()
+    .select('changelog_posts')
+    .from<ChangelogPosts>(ChangelogPosts, 'changelog_posts')
+    .where(`changelog_posts.version = '${currentVer}'`)
+    .getOne();
+
+  if (lastChangelogPost) {
+    return;
+  }
+
+  const newChangelogPost: ChangelogPosts = {
+    'id': 1,
+    'version': `${currentVer}`,
+    'dateDeployed': moment.tz('Europe/Prague').toISOString(true)
+  };
+
+  const changelogPostData = {
+    'chat_id': `${process.env.TG_INFO_CHANNEL_ID}`,
+    'parse_mode': 'HTML'
+  };
+
+  changelogPostData['text'] = `<b>New version: ${currentVer}</b>\n`;
+
+  const changelog: object = getVersionChangelog(currentVer);
+  const changelogKeys = Object.keys(changelog[currentVer]);
+  for (let i = 0, j = changelogKeys.length; i < j; i++) {
+    const currentKey = changelogKeys[i];
+    changelogPostData['text'] += `${currentKey}\n`;
+    const currentMessages: string[] = changelog[currentVer][currentKey];
+    currentMessages.forEach(message => {
+      changelogPostData['text'] += `  --&gt; <i>${message}</i>\n`;
+    });
+    changelogPostData['text'] += '\n';
+  }
+
+  await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, changelogPostData);
+
+  const changelogPostRepository = getRepository(ChangelogPosts);
+  await changelogPostRepository.save<ChangelogPosts>(newChangelogPost);
 };
