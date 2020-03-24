@@ -1,0 +1,8 @@
+{
+	"eslint.format.enable": true,
+	"eslint.probe": [
+		"typescript"
+	],
+	"eslint.run": "onSave",
+	"eslint.options": { "configFile": ".eslintrc.json" }
+}

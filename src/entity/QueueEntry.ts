@@ -1,45 +1,45 @@
-import { QueueEntryOrigin } from '../util/enums';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { QueueEntryOrigin } from '../util/enums';
 
 @Entity()
 export class QueueEntry {
-    @PrimaryGeneratedColumn()
-    id!: number;
+	@PrimaryGeneratedColumn()
+	public id!: number;
 
-    @Column({
-        'type': 'enum',
-        'enum': QueueEntryOrigin,
-        'default': QueueEntryOrigin.FA
-    })
-    origin!: QueueEntryOrigin;
+	@Column({
+		'type': 'enum',
+		'enum': QueueEntryOrigin,
+		'default': QueueEntryOrigin.FA
+	})
+	public origin!: QueueEntryOrigin;
 
-    @Column()
-    postId!: number;
+	@Column()
+	public postId!: number;
 
-    @Column({ 'unique': true })
-    postOriginIdComb!: string;
+	@Column({ 'unique': true })
+	public postOriginIdComb!: string;
 
-    @Column()
-    postLink!: string;
+	@Column()
+	public postLink!: string;
 
-    @Column()
-    artistLink!: string;
+	@Column()
+	public artistLink!: string;
 
-    @Column()
-    fullLink!: string;
+	@Column()
+	public fullLink!: string;
 
-    @Column()
-    tgImageLink!: string;
+	@Column()
+	public tgImageLink!: string;
 
-    @Column({ 'default': '2.1.2' })
-    savedWithApiVer!: string;
+	@Column({ 'default': '2.1.2' })
+	public savedWithApiVer!: string;
 
-    @Column({ 'default': false })
-    posted!: boolean;
+	@Column({ 'default': false })
+	public posted!: boolean;
 
-    @Column({ 'nullable': true })
-    postName?: string;
+	@Column({ 'nullable': true })
+	public postName?: string;
 
-    @Column({ 'nullable': true })
-    tipLink?: string;
+	@Column({ 'nullable': true })
+	public tipLink?: string;
 }

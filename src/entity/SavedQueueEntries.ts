@@ -1,13 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 @Entity()
-export class ChangelogPosts {
+export class SavedQueueEntries {
 	@PrimaryGeneratedColumn()
 	public id!: number;
 
-	@Column()
-	public version!: string;
+	@Column({ 'default': 0 })
+	public entries!: number;
 
 	@CreateDateColumn()
-	public dateDeployed!: string;
+	public createDate!: Date;
 }

@@ -1,4 +1,14 @@
 {
+    "2.3.6": {
+		"General": [
+			"Migrated from TSLint to ESLint",
+			"ESLint fixes",
+			"Some other refactorings"
+		],
+        "Telegram bot - Info Channel": [
+            "Added daily report of how many images were adde to queue. Posts and resets every day at midnight, CET"
+        ]
+    },
     "2.3.5": {
         "Telegram bot - Info Channel": [
             "Added pinning of changelog messages"

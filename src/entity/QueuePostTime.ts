@@ -2,11 +2,11 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class QueuePostTime {
-    @PrimaryGeneratedColumn()
-    id!: number;
+	@PrimaryGeneratedColumn()
+	public id!: number;
 
-    @Column({
-        'type': 'timestamptz'
-    })
-    nextPostDatetime!: string;
+	@Column({
+		'type': 'timestamptz'
+	})
+	public nextPostDatetime!: string;
 }
