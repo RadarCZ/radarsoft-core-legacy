@@ -1,10 +1,12 @@
 import path from 'path';
-import moment from 'moment-timezone';
+
 import axios, { AxiosResponse } from 'axios';
+import moment from 'moment-timezone';
 import { getConnection } from 'typeorm';
-import { getRandomNumber, getPackageJsonVersion } from '../../util/misc';
-import { QueueEntry } from '../../entity/QueueEntry';
+
 import { logger } from '../../config/winston';
+import { QueueEntry } from '../../entity/QueueEntry';
+import { getRandomNumber, getPackageJsonVersion } from '../../util/misc';
 
 export const postToChannel:
 (channelId: string, postId: number, queueLength: number) => Promise<boolean | Error>

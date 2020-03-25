@@ -85,7 +85,16 @@ module.exports = {
             "undefined"
         ],
         "id-match": "error",
-        "import/order": "error",
+        "import/order": [
+			"error",
+			{
+				"alphabetize": {
+					"order": "asc",
+					"caseInsensitive": true
+				},
+				"newlines-between": "always"
+			}
+		],
         "max-classes-per-file": [
             "error",
             1

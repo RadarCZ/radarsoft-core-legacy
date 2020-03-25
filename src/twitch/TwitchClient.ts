@@ -1,4 +1,5 @@
 import { client, Client, Events } from 'tmi.js';
+
 import TwitchOptions from './TwitchOptions';
 
 export default class TwitchClient {

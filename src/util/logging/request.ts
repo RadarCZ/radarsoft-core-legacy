@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+
 import { logger } from '../../config/winston';
 
 export const requestLogger: (req: Request, res: Response, next: NextFunction) => void = (req, res, next ) => {

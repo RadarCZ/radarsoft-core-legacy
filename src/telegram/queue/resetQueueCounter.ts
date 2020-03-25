@@ -1,6 +1,7 @@
-import { getConnection, getRepository } from 'typeorm';
-import moment from 'moment';
 import axios from 'axios';
+import moment from 'moment';
+import { getConnection, getRepository } from 'typeorm';
+
 import { SavedQueueEntries } from '../../entity/SavedQueueEntries';
 
 export const resetQueueCounter: () => void = async () => {
@@ -15,7 +16,7 @@ export const resetQueueCounter: () => void = async () => {
 		const yesterdayDate: moment.Moment = moment().subtract(1, 'day');
 		const telegramData = {
 			'chat_id': `${process.env.TG_INFO_CHANNEL_ID}`,
-			'text': `<b>${yesterdayDate.year()}-${yesterdayDate.month()}-${yesterdayDate.day()}</b>\nSubmissions added to queue: ${lastDayCounter.entries}`,
+			'text': `<b>${yesterdayDate.format('YYYY-MM-DD')}</b>\nSubmissions added to queue: ${lastDayCounter.entries}`,
 			'parse_mode': 'HTML'
 		};
 		await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, telegramData);

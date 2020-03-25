@@ -1,10 +1,12 @@
-import applyConverters from 'axios-case-converter-updated';
 import axios from 'axios';
+import applyConverters from 'axios-case-converter-updated';
 import { getConnection, getRepository } from 'typeorm';
+
 import { logger } from '../config/winston';
 import { WuhanTracker } from '../entity/WuhanTracker';
-import TelegramChatData from './structs/telegramChatData';
+
 import { NCovStatType, TelegramParseMode } from './enums';
+import TelegramChatData from './structs/telegramChatData';
 
 export default class NCovTracker {
 	private urlConfirmed: string;

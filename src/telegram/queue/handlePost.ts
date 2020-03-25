@@ -1,8 +1,10 @@
 import moment from 'moment-timezone';
 import { getConnection } from 'typeorm';
+
 import { logger } from '../../config/winston';
-import { getRandomNumber } from '../../util/misc';
 import { QueueEntry } from '../../entity/QueueEntry';
+import { getRandomNumber } from '../../util/misc';
+
 import { postToChannel } from '.';
 
 export const handlePost: () => void = async () => {

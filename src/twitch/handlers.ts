@@ -1,4 +1,5 @@
 import { Events } from 'tmi.js';
+
 import { commandsHandler } from './handlers/commands-handler';
 import { connectedHandler } from './handlers/connected-handler';
 

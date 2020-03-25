@@ -1,12 +1,14 @@
 import url from 'url';
+
 import { Login, Submission } from 'radars-furaffinity-api';
 import { Submission as SubmissionType } from 'radars-furaffinity-api/dist/interfaces';
 import { getConnection, Connection, getRepository } from 'typeorm';
+
+import { logger } from '../../config/winston';
 import { QueueEntry } from '../../entity/QueueEntry';
 import { SavedQueueEntries } from '../../entity/SavedQueueEntries';
-import { logger } from '../../config/winston';
-import { getPackageJsonVersion } from '../../util/misc';
 import { QueueEntryOrigin } from '../../util/enums';
+import { getPackageJsonVersion } from '../../util/misc';
 import { IRadarsoftHandler } from '../IRadarsoftHandler';
 
 export const queue: IRadarsoftHandler = async (req, res) => {

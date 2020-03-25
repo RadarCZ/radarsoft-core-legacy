@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+
 import { default as seedRandom } from 'seedrandom';
 
 export const getAllowedKeys: (keys: string[], object: any, remove: boolean) => string[] = (keys, object, remove) => {

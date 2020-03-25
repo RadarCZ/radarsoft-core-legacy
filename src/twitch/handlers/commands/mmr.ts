@@ -1,5 +1,7 @@
 import axios from 'axios';
+
 import TwitchClient from '../../TwitchClient';
+
 import { ICommandHandler } from './ICommandHandler';
 
 export const mmrCommand: ICommandHandler = channel => {

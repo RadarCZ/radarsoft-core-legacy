@@ -1,5 +1,7 @@
 import { ChatUserstate } from 'tmi.js';
+
 import TwitchClient from '../TwitchClient';
+
 import { lolCommand } from './commands/lol';
 import { mmrCommand } from './commands/mmr';
 import { steamCommand } from './commands/steam';

@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { IRadarsoftHandler } from '../IRadarsoftHandler';
 
 export const getGcData: IRadarsoftHandler = async (req, res) => {

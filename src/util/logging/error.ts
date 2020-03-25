@@ -1,4 +1,5 @@
 import { Request, NextFunction, Response } from 'express';
+
 import { logger } from '../../config/winston';
 
 declare type ErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => void;

@@ -1,4 +1,5 @@
 import TwitchClient from '../../TwitchClient';
+
 import { ICommandHandler } from './ICommandHandler';
 
 export const steamCommand: ICommandHandler = channel => {

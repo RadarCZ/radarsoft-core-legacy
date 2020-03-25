@@ -1,6 +1,7 @@
-import { CronJob } from 'cron';
 import axios from 'axios';
+import { CronJob } from 'cron';
 import { createConnection } from 'typeorm';
+
 import app from './app';
 import { logger } from './config/winston';
 import { handleNewVersionStartup } from './telegram/announceNewVersion';

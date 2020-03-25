@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { getConnection, getRepository } from 'typeorm';
-import { getPackageJsonVersion, getVersionChangelog } from '../util/misc';
+
 import { ChangelogPosts } from '../entity/ChangelogPosts';
+import { getPackageJsonVersion, getVersionChangelog } from '../util/misc';
 
 export const handleNewVersionStartup: () => void = async () => {
 	const currentVer = getPackageJsonVersion();
