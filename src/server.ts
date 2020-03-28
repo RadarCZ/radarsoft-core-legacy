@@ -15,7 +15,7 @@ const server = app.listen(app.get('port'), () => {
 	createConnection().then(() => {
 		logger.info(`App is running at http://localhost:${app.get('port')} in ${app.get('env')} mode`);
 
-		const postJob: CronJob = new CronJob('*/10 * * * *', handlePost);
+		const postJob: CronJob = new CronJob('*/4 * * * *', handlePost);
 		postJob.start();
 
 		const savedQueueResetJob: CronJob = new CronJob('0 0 * * *', resetQueueCounter);

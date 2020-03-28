@@ -1,4 +1,10 @@
 {
+	"2.3.9": {
+		"Telegram bot - Image channel": [
+			"Changed number of daily posts from 144 to 360, since the queue is still growing.",
+			"Yeah, that means it will be the same spam as it used to be :))"
+		]
+	},
 	"2.3.8": {
 		"Telegram bot - Channel queue": [
 			"Now saving artists' names separately"
