@@ -12,19 +12,20 @@ export default class NCovTracker {
 	private urlConfirmed: string;
 	private urlDeaths: string;
 	private urlRecovered: string;
+	private urlLocalTesting: string;
+	private urlLocalInfections: string;
 
 	public constructor () {
 		this.urlConfirmed = this.constructURL(NCovStatType.Confirmed);
 		this.urlDeaths = this.constructURL(NCovStatType.Deaths);
 		this.urlRecovered = this.constructURL(NCovStatType.Recovered);
+		this.urlLocalTesting = 'https://onemocneni-aktualne.mzcr.cz/api/v1/covid-19/testy.json';
+		this.urlLocalInfections = 'https://onemocneni-aktualne.mzcr.cz/api/v1/covid-19/nakaza.json';
 	}
 
 	public async report(): Promise<boolean> {
-		if (!process.env.TG_BOT_TOKEN) {
-			logger.warn('Skipping Covid19 update, no Telegram token (TG_BOT_TOKEN)');
-
+		if(!this.checkTelegramEligibility())
 			return false;
-		}
 
 		const confirmedResponse = await axios.get(this.urlConfirmed);
 		const deathsResponse = await axios.get(this.urlDeaths);
@@ -83,6 +84,39 @@ export default class NCovTracker {
 		return true;
 	}
 
+	public async reportLocal(): Promise<boolean> {
+		if(!this.checkTelegramEligibility())
+			return false;
+
+		const responseTesting = await axios.get(this.urlLocalTesting);
+		const responseInfections = await axios.get(this.urlLocalInfections);
+
+		const latestTestObject = responseTesting.data.data.slice(-1)[0];
+		const latestInfectionObject = responseInfections.data.slice(-1)[0];
+
+		const infectionIncrement = latestInfectionObject['pocetDen'];
+		const totalTests = latestTestObject['testy-den'];
+		const date = latestInfectionObject['datum'];
+
+		const positiveTestPercentage = (infectionIncrement / totalTests) * 100;
+		const positiveTestPercentageFmt = positiveTestPercentage.toFixed(2);
+
+		const message = [
+			`<b>Czechia COVID-19 report for ${date}<b>`,
+			` Tests this day: ${totalTests}`,
+			` Positive tests: ${infectionIncrement} (${positiveTestPercentageFmt}%)`
+		].join('\n');
+
+		const infoTelegramData = {
+			'chat_id': `${process.env.TG_INFO_CHANNEL_ID}`,
+			'text': message,
+			'parse_mode': 'HTML'
+		};
+		await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, infoTelegramData);
+
+		return true;
+	}
+
 	private constructURL(type: NCovStatType): string {
 		let strType: string;
 		switch (type) {
@@ -101,5 +135,15 @@ export default class NCovTracker {
 		const url = `https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/1/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22${strType}%22%2C%22outStatisticFieldName%22%3A%22value%22%7D%5D&outSR=102100&cacheHint=true`;
 
 		return url;
+	}
+
+	private checkTelegramEligibility(): boolean {
+		if (!process.env.TG_BOT_TOKEN) {
+			logger.warn('Skipping Covid19 update, no Telegram token (TG_BOT_TOKEN)');
+
+			return false;
+		}
+
+		return true;
 	}
 }
