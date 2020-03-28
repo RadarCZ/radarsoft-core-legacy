@@ -27,9 +27,16 @@ const server = app.listen(app.get('port'), () => {
 				logger.error('Covid19 report failed');
 			});
 		};
+		const wuhanLocalReport = (): void => {
+			wuhan.reportLocal().catch(() => {
+				logger.error('Covid19 report for Czechia failed');
+			});
+		};
 
-		const job: CronJob = new CronJob('0 8-20/4 * * *', wuhanReport);
-		job.start();
+		const jobWuhan: CronJob = new CronJob('0 8-20/4 * * *', wuhanReport);
+		const jobWuhanLocal: CronJob = new CronJob('0 12 * * *', wuhanLocalReport);
+		jobWuhan.start();
+		jobWuhanLocal.start();		
 
 		if (process.env.TG_BOT_TOKEN) {
 			handleNewVersionStartup();
