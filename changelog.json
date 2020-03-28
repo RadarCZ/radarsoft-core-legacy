@@ -1,4 +1,9 @@
 {
+	"2.3.8": {
+		"Telegram bot - Channel queue": [
+			"Now saving artists' names separately"
+		]
+	},
 	"2.3.7": {
 		"Telegram bot - Daily Summary": [
 			"Fixed date format"

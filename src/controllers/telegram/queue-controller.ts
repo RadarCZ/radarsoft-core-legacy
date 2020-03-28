@@ -43,6 +43,7 @@ export const queue: IRadarsoftHandler = async (req, res) => {
 		.values({
 			fullLink,
 			artistLink,
+			'artistName': req.body.artistName,
 			postLink,
 			'postName': req.body.postName,
 			origin,
@@ -127,6 +128,7 @@ export const bulkFaQueue: IRadarsoftHandler = async (req, res) => {
 				newEntry.origin = QueueEntryOrigin.FA;
 				newEntry.postLink = submission.url;
 				newEntry.artistLink = `http://furaffinity.net/user/${submission.author.id}`;
+				newEntry.artistName = submission.author.id;
 				newEntry.fullLink = submission.downloadUrl;
 				newEntry.postOriginIdComb = `FA_${postIds[i]}`;
 				newEntry.savedWithApiVer = `${getPackageJsonVersion()}-bulk`;

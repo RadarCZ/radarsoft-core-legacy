@@ -26,6 +26,9 @@ export class QueueEntry {
 	@Column()
 	public artistLink!: string;
 
+	@Column({ 'default': null, 'nullable': true })
+	public artistName?: string;
+
 	@Column()
 	public fullLink!: string;
 
@@ -43,4 +46,7 @@ export class QueueEntry {
 
 	@Column({ 'nullable': true })
 	public tipLink?: string;
+
+	@Column({ 'default': false })
+	public savedOnDisk!: boolean;
 }
