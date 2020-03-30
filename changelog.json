@@ -1,4 +1,9 @@
 {
+	"2.3.10": {
+		"General": [
+			"Added error logging for failed base promises."
+		]
+	},
 	"2.3.9": {
 		"Telegram bot - Image channel": [
 			"Changed number of daily posts from 144 to 360, since the queue is still growing.",

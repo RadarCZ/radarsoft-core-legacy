@@ -23,18 +23,20 @@ const server = app.listen(app.get('port'), () => {
 
 		const wuhan = new NCovTracker();
 		const wuhanReport = (): void => {
-			wuhan.report().catch(() => {
+			wuhan.report().catch(error => {
 				logger.error('Covid19 report failed');
+				logger.error(error);
 			});
 		};
 		const wuhanLocalReport = (): void => {
-			wuhan.reportLocal().catch(() => {
+			wuhan.reportLocal().catch(error => {
 				logger.error('Covid19 report for Czechia failed');
+				logger.error(error);
 			});
 		};
 
 		const jobWuhan: CronJob = new CronJob('0 8-20/4 * * *', wuhanReport);
-		const jobWuhanLocal: CronJob = new CronJob('0 12 * * *', wuhanLocalReport);
+		const jobWuhanLocal: CronJob = new CronJob('0 17 * * *', wuhanLocalReport);
 		jobWuhan.start();
 		jobWuhanLocal.start();
 
@@ -45,7 +47,7 @@ const server = app.listen(app.get('port'), () => {
 				'allowed_updates' : ['message']
 			}).then(() => {
 				logger.info('Telegram WebHook endpoint set.');
-			}).catch(logger.info);
+			}).catch(logger.error);
 		} else {
 			logger.warn('Unable to attach Telegram webhook, no token (TG_BOT_TOKEN)');
 		}
