@@ -36,7 +36,7 @@ const server = app.listen(app.get('port'), () => {
 		};
 
 		const jobWuhan: CronJob = new CronJob('0 8-20/4 * * *', wuhanReport);
-		const jobWuhanLocal: CronJob = new CronJob('0 17 * * *', wuhanLocalReport);
+		const jobWuhanLocal: CronJob = new CronJob('0 18 * * *', wuhanLocalReport);
 		jobWuhan.start();
 		jobWuhanLocal.start();
 

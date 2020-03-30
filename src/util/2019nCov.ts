@@ -90,42 +90,44 @@ export default class NCovTracker {
 			return false;
 		}
 
-		try {
-			const responseTesting = await axios.get(this.urlLocalTesting);
-			const responseInfections = await axios.get(this.urlLocalInfections);
 
-			const latestTestObject = responseTesting.data.data.slice(-1)[0];
-			const latestInfectionObject = responseInfections.data.slice(-1)[0];
+		const responseTesting = await axios.get(this.urlLocalTesting);
+		const responseInfections = await axios.get(this.urlLocalInfections);
 
-			const infectionIncrement = latestInfectionObject['pocetDen'];
-			const totalTests = latestTestObject['testy-den'];
-			const date = latestInfectionObject['datum'];
+		const latestTestObject = responseTesting.data.data.slice(-1)[0];
+		const latestInfectionObject = responseInfections.data.slice(-1)[0];
 
-			const positiveTestPercentage = (infectionIncrement / totalTests) * 100;
-			const positiveTestPercentageFmt = positiveTestPercentage.toFixed(2);
+		const infectionIncrement = latestInfectionObject['pocetDen'];
+		const totalTests = latestTestObject['testy-den'];
+		const date = latestInfectionObject['datum'];
 
-			const message = [
-				`<b>Czechia COVID-19 report for ${date}<b>`,
-				` Tests this day: ${totalTests}`,
-				` Positive tests: ${infectionIncrement} (${positiveTestPercentageFmt}%)`
-			].join('\n');
+		const positiveTestPercentage = (infectionIncrement / totalTests) * 100;
+		const positiveTestPercentageFmt = positiveTestPercentage.toFixed(2);
 
-			const infoTelegramData = {
-				'chat_id': `${process.env.TG_INFO_CHANNEL_ID}`,
-				'text': message,
-				'parse_mode': 'HTML'
-			};
-			const postResult = await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, infoTelegramData);
-			logger.info(postResult);
-			// console.log here
+		const message = [
+			`<b>Czechia COVID-19 report for ${date}</b>`,
+			` Tests this day: ${totalTests}`,
+			` Positive tests: ${infectionIncrement} (${positiveTestPercentageFmt}%)`
+		].join('\n');
 
-			return true;
-		} catch (error) {
-			console.trace();
-			console.error(error);
+		const telegramData = new TelegramChatData(
+			parseInt(`${process.env.TG_HOOSKWOOF_UPDATES_ID}`, 10),
+			message,
+			TelegramParseMode.HTML
+		);
 
-			return false;
-		}
+		const client = applyConverters(axios.create());
+		await client.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, telegramData);
+
+		const infoTelegramData = {
+			'chat_id': `${process.env.TG_INFO_CHANNEL_ID}`,
+			'text': message,
+			'parse_mode': 'HTML'
+		};
+
+		await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, infoTelegramData);
+
+		return true;
 	}
 
 	private constructURL(type: NCovStatType): string {

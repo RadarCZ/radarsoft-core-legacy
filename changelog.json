@@ -1,4 +1,9 @@
 {
+	"2.3.11": {
+		"Telegram bot - Info channel": [
+			"Fixed reporting of CZ COVID-19 status"
+		]
+	},
 	"2.3.10": {
 		"General": [
 			"Added error logging for failed base promises."
