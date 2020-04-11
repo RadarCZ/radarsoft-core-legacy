@@ -8,10 +8,10 @@ export const mmrCommand: ICommandHandler = channel => {
 	const client = TwitchClient.getInstance();
 	axios.get(`https://api.opendota.com/api/players/${process.env.STEAM64_ID}`).then(
 		response => {
-			const { estimate } = response.data['mmr_estimate'];
+			const soloCompetitiveRank = response.data['solo_competitive_rank'];
 			let emote: string;
 
-			const estimateInt = parseInt(`${estimate}`, 10);
+			const estimateInt = parseInt(`${soloCompetitiveRank}`, 10);
 
 			if (estimateInt <= 1000) {
 				emote = 'OMEGALUL';
@@ -25,7 +25,7 @@ export const mmrCommand: ICommandHandler = channel => {
 				emote = 'Pog';
 			}
 
-			client.say(channel, `Odhadované MMR streamera je ${estimate} ${emote}`);
+			client.say(channel, `Streamer's MMR is (approximately) ${estimateInt} ${emote}`);
 		}
 	);
 };

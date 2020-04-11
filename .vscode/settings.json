@@ -3,6 +3,5 @@
 	"eslint.probe": [
 		"typescript"
 	],
-	"eslint.run": "onSave",
-	"eslint.options": { "configFile": ".eslintrc.json" }
+	"eslint.run": "onSave"
 }

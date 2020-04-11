@@ -2,6 +2,7 @@ import { ChatUserstate } from 'tmi.js';
 
 import TwitchClient from '../TwitchClient';
 
+import { discordCommand } from './commands/discord';
 import { lolCommand } from './commands/lol';
 import { mmrCommand } from './commands/mmr';
 import { steamCommand } from './commands/steam';
@@ -31,7 +32,10 @@ export const commandsHandler: (channel: string, userState: ChatUserstate, messag
 		case 'lol':
 			lolCommand(channel);
 			break;
+		case 'discord':
+			discordCommand(channel);
+			break;
 		default:
-			client.say(channel, `Příkaz ${command} (ještě) neumím FeelsBadMan`);
+			client.say(channel, 'I don\'t know that command yet FeelsBadMan');
 	}
 };

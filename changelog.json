@@ -1,4 +1,12 @@
 {
+	"2.3.12": {
+		"General": [
+			"Upgraded dependencies."
+		],
+		"Twitch bot": [
+			"Added !discord command."
+		]
+	},
 	"2.3.11": {
 		"Telegram bot - Info channel": [
 			"Fixed reporting of CZ COVID-19 status"

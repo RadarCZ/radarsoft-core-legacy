@@ -21,6 +21,8 @@ const server = app.listen(app.get('port'), () => {
 		const savedQueueResetJob: CronJob = new CronJob('0 0 * * *', resetQueueCounter);
 		savedQueueResetJob.start();
 
+		// const bttvReminderJob: CronJob = new CronJob('10 * * * *', remindBttv);
+
 		const wuhan = new NCovTracker();
 		const wuhanReport = (): void => {
 			wuhan.report().catch(error => {
