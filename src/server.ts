@@ -6,9 +6,6 @@ import app from './app';
 import { logger } from './config/winston';
 import { handleNewVersionStartup } from './telegram/announceNewVersion';
 import { handlePost, resetQueueCounter } from './telegram/queue';
-import Handlers from './twitch/handlers';
-import TwitchClient from './twitch/TwitchClient';
-import TwitchOptions from './twitch/TwitchOptions';
 import NCovTracker from './util/2019nCov';
 
 const server = app.listen(app.get('port'), () => {
@@ -52,16 +49,6 @@ const server = app.listen(app.get('port'), () => {
 			}).catch(logger.error);
 		} else {
 			logger.warn('Unable to attach Telegram webhook, no token (TG_BOT_TOKEN)');
-		}
-
-		if (!!process.env.TWITCH_BOT_USERNAME
-      		&& process.env.TWITCH_BOT_OAUTH
-      		&& process.env.TWITCH_CHANNEL_NAME) {
-			const options = new TwitchOptions(process.env.TWITCH_BOT_USERNAME, process.env.TWITCH_BOT_OAUTH, process.env.TWITCH_CHANNEL_NAME);
-			TwitchClient.create(options, Handlers);
-			TwitchClient.getInstance().connect();
-		} else {
-			logger.warn('Unable to connect to Twitch, missing credentials (TWITCH_BOT_USERNAME, TWITCH_BOT_OAUTH, TWITCH_CHANNEL_NAME)');
 		}
 
 		logger.info('Press CTRL-C to stop');

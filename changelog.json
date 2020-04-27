@@ -1,4 +1,9 @@
 {
+	"2.4.0": {
+		"Twitch bot": [
+			"Moved twitch functionality to another server for better code sustainability."
+		]
+	},
 	"2.3.12": {
 		"General": [
 			"Upgraded dependencies."
