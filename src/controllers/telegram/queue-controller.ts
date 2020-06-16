@@ -157,7 +157,7 @@ export const bulkFaQueue: IRadarsoftHandler = async (req, res) => {
 			await getRepository(SavedQueueEntries).save(queueEntriesSavedToday);
 		}
 
-		res.status(200).end();
+		res.status(200).json(true);
 	} catch (err) {
 		await queryRunner.rollbackTransaction();
 		logger.error(err);
