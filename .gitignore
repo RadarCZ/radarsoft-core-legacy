@@ -65,3 +65,4 @@ typings/
 *.ini
 /data
 ormconfig.json
+*.webp

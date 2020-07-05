@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { IRadarsoftHandler } from '../IRadarsoftHandler';
+import { IAsyncRadarsoftHandler } from '../IRadarsoftHandler';
 
-export const getGhData: IRadarsoftHandler = async (req, res) => {
+export const getGhData: IAsyncRadarsoftHandler = async (req, res) => {
 	const { u } = req.query;
 	const url = `https://api.github.com/users/${u}`;
 	const ghResponse = await axios.get(url);

@@ -51,6 +51,15 @@ const server = app.listen(app.get('port'), () => {
 			logger.warn('Unable to attach Telegram webhook, no token (TG_BOT_TOKEN)');
 		}
 
+		if (process.env.TG_STICKER_BOT_TOKEN) {
+		  axios.post(`https://api.telegram.org/bot${process.env.TG_STICKER_BOT_TOKEN}/setWebhook`, {
+		    'url': `https://radarsoft.cz/api/telegram/processUpdate?botToken=${process.env.TG_STICKER_BOT_TOKEN}`,
+				'allowed_updates': ['inline_query']
+		  }).then(() => {
+		  	logger.info('Niclus is armed and ready >:3');
+		  }).catch(logger.error);
+		}
+
 		logger.info('Press CTRL-C to stop');
 	});
 });

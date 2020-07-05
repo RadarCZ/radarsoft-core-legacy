@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import path from 'path';
 
 import bodyParser from 'body-parser';
@@ -26,12 +28,19 @@ if (process.env.USE_REQUEST_LOGGING) {
 	app.use(requestLogger);
 }
 
+if (process.env.USE_ERROR_LOGGING) {
+	app.use(errorLogger);
+}
+
 app.set('port', process.env.PORT);
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 	next();
+
 });
+
+app.use('/cdn', express.static('cdn'));
 
 app.get('/api/geocaching', getGcData);
 
@@ -42,10 +51,6 @@ app.post('/api/telegram/processUpdate', processWebhook);
 app.post('/api/telegram/:botToken/queue', queue);
 
 app.post('/api/telegram/:botToken/bulkFaQueue', bulkFaQueue);
-
-if (process.env.USE_ERROR_LOGGING) {
-	app.use(errorLogger);
-}
 
 app.post('/api/kofi/dongnation', kofiDongnation);
 

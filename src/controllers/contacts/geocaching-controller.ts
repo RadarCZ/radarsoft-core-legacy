@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { IRadarsoftHandler } from '../IRadarsoftHandler';
+import { IAsyncRadarsoftHandler } from '../IRadarsoftHandler';
 
-export const getGcData: IRadarsoftHandler = async (req, res) => {
+export const getGcData: IAsyncRadarsoftHandler = async (req, res) => {
 	const { u } = req.query;
 	const url = `https://www.geocaching.com/p/default.aspx?u=${u}`;
 	const gcResponse = await axios.get(url);

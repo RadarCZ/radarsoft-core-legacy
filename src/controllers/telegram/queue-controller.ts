@@ -9,9 +9,9 @@ import { QueueEntry } from '../../entity/QueueEntry';
 import { SavedQueueEntries } from '../../entity/SavedQueueEntries';
 import { QueueEntryOrigin } from '../../util/enums';
 import { getPackageJsonVersion } from '../../util/misc';
-import { IRadarsoftHandler } from '../IRadarsoftHandler';
+import { IAsyncRadarsoftHandler } from '../IRadarsoftHandler';
 
-export const queue: IRadarsoftHandler = async (req, res) => {
+export const queue: IAsyncRadarsoftHandler = async (req, res) => {
 	if (req.params.botToken !== process.env.TG_BOT_TOKEN) {
 		res.sendStatus(401);
 
@@ -73,7 +73,7 @@ export const queue: IRadarsoftHandler = async (req, res) => {
 	res.status(200).end();
 };
 
-export const bulkFaQueue: IRadarsoftHandler = async (req, res) => {
+export const bulkFaQueue: IAsyncRadarsoftHandler = async (req, res) => {
 	if (req.params.botToken !== process.env.TG_BOT_TOKEN) {
 		res.sendStatus(401);
 

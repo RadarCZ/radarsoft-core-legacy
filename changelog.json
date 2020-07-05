@@ -1,4 +1,10 @@
 {
+    "2.5.0": {
+        "Niclus": [
+            "Added new telegram bot.",
+            "Might tell more if you ask :P"
+        ]
+    },
 	"2.4.0": {
 		"Twitch bot": [
 			"Moved twitch functionality to another server for better code sustainability."

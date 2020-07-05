@@ -17,3 +17,8 @@ export enum QueueEntryOrigin {
 	SF = 'SF',
 	E6 = 'E6'
 }
+
+export enum WebhookBodyTypes {
+	MESSAGE = 'message',
+	INLINE_QUERY = 'inline_query'
+}

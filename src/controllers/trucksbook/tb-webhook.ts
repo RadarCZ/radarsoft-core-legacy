@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { IRadarsoftHandler } from '../IRadarsoftHandler';
+import { IAsyncRadarsoftHandler } from '../IRadarsoftHandler';
 
-export const relayETSPayload: IRadarsoftHandler = (req, res) => {
+export const relayETSPayload: IAsyncRadarsoftHandler = async (req, res) => {
 	const game = `${req.params.game}`.toUpperCase();
 	const requestData = req.body;
 	const contentParts = requestData.content.split('<');
@@ -29,8 +29,11 @@ export const relayETSPayload: IRadarsoftHandler = (req, res) => {
 			}
 		]
 	};
+	const promises = [
+		axios.post(`${process.env[`TB_${game}_DISCORD`]}`, discordData),
+		axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, tgData)
+	];
 
-	axios.post(`${process.env[`TB_${game}_DISCORD`]}`, discordData);
-	axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, tgData);
+	await Promise.all(promises);
 	res.status(200).end();
 };
