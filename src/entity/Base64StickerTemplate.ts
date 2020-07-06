@@ -17,6 +17,36 @@ export class Base64StickerTemplate {
 	@Column()
 	public tHeight!: number;
 
+	@Column({
+		'type': 'real'
+	})
+	public ttA!: number;
+
+	@Column({
+		'type': 'real'
+	})
+	public ttB!: number;
+
+	@Column({
+		'type': 'real'
+	})
+	public ttC!: number;
+
+	@Column({
+		'type': 'real'
+	})
+	public ttD!: number;
+
+	@Column({
+		'type': 'real'
+	})
+	public ttE!: number;
+
+	@Column({
+		'type': 'real'
+	})
+	public ttF!: number;
+
 	@Column()
 	public base64!: string;
 }

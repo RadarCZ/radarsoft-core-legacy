@@ -1,4 +1,9 @@
 {
+    "2.5.1": {
+        "Niclus": [
+            "Added logging of queries to maybe implement some profanity filter later :)"
+        ]
+    },
     "2.5.0": {
         "Niclus": [
             "Added new telegram bot.",

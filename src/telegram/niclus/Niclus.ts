@@ -1,6 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 import path from 'path';
+import { performance } from 'perf_hooks';
 
 import axios from 'axios';
 import { createCanvas, Image, registerFont } from 'canvas';
@@ -11,6 +12,7 @@ import { getConnection } from 'typeorm';
 
 import { logger } from '../../config/winston';
 import { Base64StickerTemplate } from '../../entity/Base64StickerTemplate';
+import { NiclusQueryLogs } from '../../entity/NiclusQueryLogs';
 import { StickerResult } from '../../util/structs/telegramSticker';
 import {
 	TelegramInlineQueryAnswer,
@@ -57,7 +59,7 @@ export class Niclus {
 		if (!this.InlineQuery.query) {
 			return;
 		}
-
+		const t0 = performance.now();
 		const generatedStickerIds = await this.createStickers();
 
 		const results: TelegramInlineQueryResult[] = generatedStickerIds.map(value => {
@@ -73,6 +75,20 @@ export class Niclus {
 			results
 		};
 		await axios.post(`https://api.telegram.org/bot${process.env.TG_STICKER_BOT_TOKEN}/answerInlineQuery`, answer);
+		const t1 = performance.now();
+
+		await getConnection()
+			.createQueryBuilder()
+			.insert()
+			.into(NiclusQueryLogs)
+			.values({
+				'firstName': this.InlineQuery.from.first_name,
+				'query': this.InlineQuery.query,
+				'userId': this.InlineQuery.from.id,
+				'username': this.InlineQuery.from.username,
+				'took': (t1 - t0)
+			})
+			.execute();
 
 		return;
 	}
@@ -129,6 +145,8 @@ export class Niclus {
 						currentLinePosY += lineHeight;
 					}
 
+					textCtx.transform(image.ttA, image.ttB, image.ttC, image.ttD, image.ttE, image.ttF);
+
 					finalCtx.drawImage(imgCanvas, 0, 0);
 					finalCtx.drawImage(textCanvas, image.tPosX, image.tPosY);
 
@@ -184,6 +202,8 @@ export class Niclus {
 			});
 		}));
 		await Promise.all(stickerSavingPromises);
+
+		templates.map(image => fs.unlinkSync(`${image.answerId.toString()}.webp`));
 
 		return result;
 	}
