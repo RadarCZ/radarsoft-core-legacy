@@ -49,7 +49,7 @@ export const postToChannel:
   		}
 
   		if (!tipLink && kofi) {
-  			data['caption'] += '<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a>\n';
+  			data['caption'] += '<a href="https://ko-fi.com/D1D0WKOS">Support me on Ko-fi</a> | <a href="https://paypal.me/HueHueRadar">Paypal.Me</a>';
   		}
   		data['parse_mode'] = 'HTML';
 
