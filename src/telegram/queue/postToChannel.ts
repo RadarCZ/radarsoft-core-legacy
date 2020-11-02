@@ -40,11 +40,11 @@ export const postToChannel:
   		// 	'inline_keyboard': [
   		// 		[{ 'text': 'Full res', 'url': encodeURI(fullLink)}, { 'text': 'Poster\'s profile', 'url': artistLink}]
   		// 	]
-		  // };
-		  
-		const captionSuffix = `\n<a href="${encodeURI(fullLink)}">Full resolution</a>\n<a href="${artistLink}">Poster's Profile</a>\n`; 
-		data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n`;
-		data['caption'] += captionSuffix;
+  		// };
+
+  		const captionSuffix = `\n<a href="${encodeURI(fullLink)}">Full resolution</a>\n<a href="${artistLink}">Poster's Profile</a>\n`;
+  		data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n`;
+  		data['caption'] += captionSuffix;
   		logger.info(`Submissions in queue: ${queueLength - 1}\n`);
 
   		if (tipLink) {
@@ -59,7 +59,7 @@ export const postToChannel:
   		let postResult!: AxiosResponse;
   		try {
   			postResult =
-        await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/send${sendType}`, data);
+		await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/send${sendType}`, data);
   			if (postResult.status === 200) {
   				await getConnection()
   					.createQueryBuilder()
@@ -91,7 +91,7 @@ export const postToChannel:
   				}
 
   				postResult =
-          await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, failedData);
+		  await axios.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, failedData);
   				if (postResult.status === 200) {
   					await getConnection()
   						.createQueryBuilder()
