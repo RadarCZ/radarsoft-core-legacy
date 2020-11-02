@@ -1,4 +1,9 @@
 {
+    "2.5.4": {
+        "Telegram bot": [
+            "Moved additional links from buttons to captions"
+        ]
+    },
     "2.5.3": {
         "Telegram bot": [
             "Added Paypal.me link"

@@ -36,12 +36,15 @@ export const postToChannel:
   		};
 
   		data[sendType.toLowerCase()] = dataSendType[sendType];
-  		data['reply_markup'] = {
-  			'inline_keyboard': [
-  				[{ 'text': 'Full res', 'url': encodeURI(fullLink)}, { 'text': 'Poster\'s profile', 'url': artistLink}]
-  			]
-  		};
-  		data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n`;
+  		// data['reply_markup'] = {
+  		// 	'inline_keyboard': [
+  		// 		[{ 'text': 'Full res', 'url': encodeURI(fullLink)}, { 'text': 'Poster\'s profile', 'url': artistLink}]
+  		// 	]
+		  // };
+		  
+		const captionSuffix = `\n<a href="${encodeURI(fullLink)}">Full resolution</a>\n<a href="${artistLink}">Poster's Profile</a>\n`; 
+		data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n`;
+		data['caption'] += captionSuffix;
   		logger.info(`Submissions in queue: ${queueLength - 1}\n`);
 
   		if (tipLink) {
@@ -72,11 +75,12 @@ export const postToChannel:
   				const failedData = {
   					'chat_id': data['chat_id'],
   					'parse_mode': data['parse_mode'],
-  					'reply_markup': data['reply_markup']
+  					// 'reply_markup': data['reply_markup']
   				};
 
   				failedData['text'] = `<a href="${postLink}">${postNameEscaped}</a>\n`;
-  				failedData['text'] += 'Image too big or FA down again. Click the above link to see the image.\n';
+				  failedData['text'] += 'Image too big or FA down again. Click the above link to see the image.\n';
+				  failedData['text'] += captionSuffix;
 
   				if (tipLink) {
   					failedData['text'] += `<a href="${tipLink}">Tip the artist!</a>\n`;
