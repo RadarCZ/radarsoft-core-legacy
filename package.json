@@ -4,8 +4,8 @@
   "main": "index.ts",
   "private": true,
   "scripts": {
-    "build": "npm run build-ts && npm run lint",
-    "build:win": "npm run build-ts:win && npm run lint",
+    "build": "yarn build-ts && yarn lint",
+    "build:win": "yarn build-ts:win && yarn run lint",
     "watch-node": "nodemon dist/server.js",
     "build-ts": "rm -rf dist/ && tsc || true",
     "build-ts:win": "(if exist dist/ rmdir dist /s /q) && tsc",
