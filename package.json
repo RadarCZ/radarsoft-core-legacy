@@ -4,6 +4,7 @@
   "main": "index.ts",
   "private": true,
   "scripts": {
+    "reload": "yarn build && pm2 reload api",
     "build": "yarn build-ts && yarn lint",
     "build:win": "yarn build-ts:win && yarn run lint",
     "watch-node": "nodemon dist/server.js",
