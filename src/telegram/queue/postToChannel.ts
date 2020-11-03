@@ -48,7 +48,7 @@ export const postToChannel:
   		logger.info(`Submissions in queue: ${queueLength - 1}\n`);
 
   		if (tipLink) {
-  			data['caption'] += `<a href="${tipLink}">Tip the artist!</a>\n`;
+  			data['caption'] += `💲: <a href="${tipLink}">Tip the artist!</a>\n`;
   		}
 
   		if (!tipLink && kofi) {
@@ -83,7 +83,7 @@ export const postToChannel:
 				  failedData['text'] += captionSuffix;
 
   				if (tipLink) {
-  					failedData['text'] += `<a href="${tipLink}">Tip the artist!</a>\n`;
+  					failedData['text'] += `💲: <a href="${tipLink}">Tip the artist!</a>\n`;
   				}
 
   				if (!tipLink && kofi) {
