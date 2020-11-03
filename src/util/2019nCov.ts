@@ -19,8 +19,8 @@ export default class NCovTracker {
 		this.urlConfirmed = this.constructURL(NCovStatType.Confirmed);
 		this.urlDeaths = this.constructURL(NCovStatType.Deaths);
 		this.urlRecovered = this.constructURL(NCovStatType.Recovered);
-		this.urlLocalTesting = 'https://onemocneni-aktualne.mzcr.cz/api/v1/covid-19/testy.json';
-		this.urlLocalInfections = 'https://onemocneni-aktualne.mzcr.cz/api/v1/covid-19/nakaza.json';
+		this.urlLocalTesting = 'https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/testy.json';
+		this.urlLocalInfections = 'https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/nakaza.json';
 	}
 
 	public async report(): Promise<boolean> {

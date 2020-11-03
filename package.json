@@ -1,6 +1,6 @@
 {
   "name": "radarsoft-core",
-  "version": "2.5.4",
+  "version": "2.5.5",
   "main": "index.ts",
   "private": true,
   "scripts": {

@@ -1,4 +1,9 @@
 {
+    "2.5.5": {
+        "Telegram bot - info channel": [
+            "Fixed MZCR API calls"
+        ]
+    },
     "2.5.4": {
         "Telegram bot": [
             "Moved additional links from buttons to captions"
