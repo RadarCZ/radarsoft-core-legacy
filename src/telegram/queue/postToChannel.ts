@@ -42,7 +42,7 @@ export const postToChannel:
   		// 	]
   		// };
 
-  		const captionSuffix = `\n<a href="${encodeURI(fullLink)}">Full resolution</a>\n<a href="${artistLink}">Poster's Profile</a>\n`;
+  		const captionSuffix = `\n🖌️: <a href="${artistLink}">Artist's Profile</a>\n💾: <a href="${encodeURI(fullLink)}">Full resolution</a>\n`;
   		data['caption'] = `<a href="${postLink}">${postNameEscaped}</a>\n`;
   		data['caption'] += captionSuffix;
   		logger.info(`Submissions in queue: ${queueLength - 1}\n`);
