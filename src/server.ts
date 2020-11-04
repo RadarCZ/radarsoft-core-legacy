@@ -21,12 +21,12 @@ const server = app.listen(app.get('port'), () => {
 		// const bttvReminderJob: CronJob = new CronJob('10 * * * *', remindBttv);
 
 		const wuhan = new NCovTracker();
-		const wuhanReport = (): void => {
-			wuhan.report().catch(error => {
-				logger.error('Covid19 report failed');
-				logger.error(error);
-			});
-		};
+		// const wuhanReport = (): void => {
+		// 	wuhan.report().catch(error => {
+		// 		logger.error('Covid19 report failed');
+		// 		logger.error(error);
+		// 	});
+		// };
 		const wuhanLocalReport = (): void => {
 			wuhan.reportLocal().catch(error => {
 				logger.error('Covid19 report for Czechia failed');
@@ -34,9 +34,9 @@ const server = app.listen(app.get('port'), () => {
 			});
 		};
 
-		const jobWuhan: CronJob = new CronJob('0 8-20/4 * * *', wuhanReport);
-		const jobWuhanLocal: CronJob = new CronJob('0 18 * * *', wuhanLocalReport);
-		jobWuhan.start();
+		// const jobWuhan: CronJob = new CronJob('0 8-20/4 * * *', wuhanReport);
+		const jobWuhanLocal: CronJob = new CronJob('0 19 * * *', wuhanLocalReport);
+		// jobWuhan.start();
 		jobWuhanLocal.start();
 
 		if (process.env.TG_BOT_TOKEN) {

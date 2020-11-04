@@ -95,10 +95,10 @@ export default class NCovTracker {
 		const responseInfections = await axios.get(this.urlLocalInfections);
 
 		const latestTestObject = responseTesting.data.data.slice(-1)[0];
-		const latestInfectionObject = responseInfections.data.slice(-1)[0];
+		const latestInfectionObject = responseInfections.data.data.slice(-1)[0];
 
-		const infectionIncrement = latestInfectionObject['pocetDen'];
-		const totalTests = latestTestObject['testy-den'];
+		const infectionIncrement = latestInfectionObject['prirustkovy_pocet_nakazenych'];
+		const totalTests = latestTestObject['prirustkovy_pocet_testu'];
 		const date = latestInfectionObject['datum'];
 
 		const positiveTestPercentage = (infectionIncrement / totalTests) * 100;
@@ -110,14 +110,14 @@ export default class NCovTracker {
 			` Positive tests: ${infectionIncrement} (${positiveTestPercentageFmt}%)`
 		].join('\n');
 
-		const telegramData = new TelegramChatData(
-			parseInt(`${process.env.TG_HOOSKWOOF_UPDATES_ID}`, 10),
-			message,
-			TelegramParseMode.HTML
-		);
+		// const telegramData = new TelegramChatData(
+		// 	parseInt(`${process.env.TG_HOOSKWOOF_UPDATES_ID}`, 10),
+		// 	message,
+		// 	TelegramParseMode.HTML
+		// );
 
-		const client = applyConverters(axios.create());
-		await client.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, telegramData);
+		// const client = applyConverters(axios.create());
+		// await client.post(`https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage`, telegramData);
 
 		const infoTelegramData = {
 			'chat_id': `${process.env.TG_INFO_CHANNEL_ID}`,
