@@ -8,6 +8,7 @@ import express, { Application } from 'express';
 
 import { getGcData } from './controllers/contacts/geocaching-controller';
 import { getGhData } from './controllers/contacts/github-controller';
+import { getOrp } from './controllers/covid/cz/orp';
 import { kofiDongnation } from './controllers/dongnations/kofi-webhook';
 import { queue, bulkFaQueue } from './controllers/telegram/queue-controller';
 import { processWebhook } from './controllers/telegram/webhook-processor';
@@ -55,5 +56,7 @@ app.post('/api/telegram/:botToken/bulkFaQueue', bulkFaQueue);
 app.post('/api/kofi/dongnation', kofiDongnation);
 
 app.post('/api/trucksbook/:game', relayETSPayload);
+
+app.get('/api/covid/cz/orp', getOrp);
 
 export default app;
