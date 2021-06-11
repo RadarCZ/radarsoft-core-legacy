@@ -1,0 +1,207 @@
+code,name,population
+1000,Praha,1324277
+2101,Benešov,61022
+2102,Beroun,64927
+2103,Brandýs nad Labem-Stará Boleslav,113282
+2104,Čáslav,25663
+2105,Černošice,149338
+2106,Český Brod,21537
+2107,Dobříš,23079
+2108,Hořovice,30131
+2109,Kladno,125957
+2110,Kolín,83500
+2111,Kralupy nad Vltavou,32515
+2112,Kutná Hora,50165
+2113,Lysá nad Labem,26907
+2114,Mělník,44600
+2115,Mladá Boleslav,112464
+2116,Mnichovo Hradiště,17901
+2117,Neratovice,32187
+2118,Nymburk,40183
+2119,Poděbrady,31382
+2120,Příbram,69951
+2121,Rakovník,55562
+2122,Říčany,71896
+2123,Sedlčany,22074
+2124,Slaný,40526
+2125,Vlašim,25947
+2126,Votice,12445
+3101,Blatná,13668
+3102,České Budějovice,162553
+3103,Český Krumlov,41687
+3104,Dačice,18783
+3105,Jindřichův Hradec,47113
+3106,Kaplice,19869
+3107,Milevsko,18235
+3108,Písek,53352
+3109,Prachatice,33458
+3110,Soběslav,21947
+3111,Strakonice,45223
+3112,Tábor,80648
+3113,Trhové Sviny,19267
+3114,Třeboň,24796
+3115,Týn nad Vltavou,14083
+3116,Vimperk,17520
+3117,Vodňany,11881
+3201,Blovice,12185
+3202,Domažlice,40679
+3203,Horažďovice,11535
+3204,Horšovský Týn,14825
+3205,Klatovy,50720
+3206,Kralovice,22367
+3207,Nepomuk,11583
+3208,Nýřany,57612
+3209,Plzeň,194280
+3210,Přeštice,22885
+3211,Rokycany,49349
+3212,Stod,23393
+3213,Stříbro,17190
+3214,Sušice,24150
+3215,Tachov,37146
+4101,Aš,17695
+4102,Cheb,49955
+4103,Karlovy Vary,87182
+4104,Kraslice,13184
+4105,Mariánské Lázně,23984
+4106,Ostrov,27636
+4107,Sokolov,75028
+4201,Bílina,22600
+4202,Děčín,76842
+4203,Chomutov,81662
+4204,Kadaň,43284
+4205,Litoměřice,59110
+4206,Litvínov,37035
+4207,Louny,43640
+4208,Lovosice,27750
+4209,Most,74673
+4210,Podbořany,15678
+4211,Roudnice nad Labem,32808
+4212,Rumburk,32795
+4213,Teplice,106472
+4214,Ústí nad Labem,119338
+4215,Varnsdorf,19905
+4216,Žatec,27373
+5101,Česká Lípa,76998
+5102,Frýdlant,24479
+5103,Jablonec nad Nisou,56206
+5104,Jilemnice,22137
+5105,Liberec,145676
+5106,Nový Bor,26302
+5107,Semily,25675
+5108,Tanvald,20412
+5109,Turnov,33623
+5110,Železný Brod,12182
+5201,Broumov,15876
+5202,Dobruška,20190
+5203,Dvůr Králové nad Labem,26949
+5204,Hořice,18377
+5205,Hradec Králové,146899
+5206,Jaroměř,19273
+5207,Jičín,48382
+5208,Kostelec nad Orlicí,24892
+5209,Náchod,60595
+5210,Nová Paka,13286
+5211,Nové Město nad Metují,14214
+5212,Nový Bydžov,17384
+5213,Rychnov nad Kněžnou,34301
+5214,Trutnov,63419
+5215,Vrchlabí,27610
+5301,Česká Třebová,17969
+5302,Hlinsko,21017
+5303,Holice,17910
+5304,Chrudim,83596
+5305,Králíky,8676
+5306,Lanškroun,23140
+5307,Litomyšl,27205
+5308,Moravská Třebová,26138
+5309,Pardubice,131691
+5310,Polička,19611
+5311,Přelouč,25840
+5312,Svitavy,31379
+5313,Ústí nad Orlicí,26573
+5314,Vysoké Mýto,32454
+5315,Žamberk,29463
+6101,Bystřice nad Pernštejnem,19755
+6102,Havlíčkův Brod,52932
+6103,Humpolec,17852
+6104,Chotěboř,21872
+6105,Jihlava,101074
+6106,Moravské Budějovice,23098
+6107,Náměšť nad Oslavou,13440
+6108,Nové Město na Moravě,19386
+6109,Pacov,9364
+6110,Pelhřimov,45086
+6111,Světlá nad Sázavou,19690
+6112,Telč,12975
+6113,Třebíč,74272
+6114,Velké Meziříčí,36390
+6115,Žďár nad Sázavou,42627
+6201,Blansko,57126
+6202,Boskovice,52010
+6203,Brno,381346
+6204,Břeclav,59715
+6205,Bučovice,16111
+6206,Hodonín,60685
+6207,Hustopeče,36311
+6208,Ivančice,24459
+6209,Kuřim,23345
+6210,Kyjov,55543
+6211,Mikulov,20265
+6212,Moravský Krumlov,22452
+6213,Pohořelice,14599
+6214,Rosice,26284
+6215,Slavkov u Brna,24027
+6216,Šlapanice,70414
+6217,Tišnov,31725
+6218,Veselí nad Moravou,37715
+6219,Vyškov,52142
+6220,Znojmo,91899
+6221,Židlochovice,33816
+7101,Hranice,34146
+7102,Jeseník,37968
+7103,Konice,10634
+7104,Lipník nad Bečvou,15130
+7105,Litovel,23715
+7106,Mohelnice,18362
+7107,Olomouc,165165
+7108,Prostějov,98012
+7109,Přerov,80236
+7110,Šternberk,24164
+7111,Šumperk,68988
+7112,Uničov,22428
+7113,Zábřeh,33067
+7201,Bystřice pod Hostýnem,15242
+7202,Holešov,21540
+7203,Kroměříž,68561
+7204,Luhačovice,18624
+7205,Otrokovice,34276
+7206,Rožnov pod Radhoštěm,35175
+7207,Uherské Hradiště,90117
+7208,Uherský Brod,52109
+7209,Valašské Klobouky,23102
+7210,Valašské Meziříčí,41831
+7211,Vizovice,17153
+7212,Vsetín,65522
+7213,Zlín,99303
+8101,Bílovec,25622
+8102,Bohumín,33366
+8103,Bruntál,36418
+8104,Český Těšín,25687
+8105,Frenštát pod Radhoštěm,19541
+8106,Frýdek-Místek,112433
+8107,Frýdlant nad Ostravicí,24950
+8108,Havířov,86494
+8109,Hlučín,40639
+8110,Jablunkov,22664
+8111,Karviná,63614
+8112,Kopřivnice,40755
+8113,Kravaře,21356
+8114,Krnov,39938
+8115,Nový Jičín,48731
+8116,Odry,16928
+8117,Opava,100967
+8118,Orlová,37163
+8119,Ostrava,320145
+8120,Rýmařov,15241
+8121,Třinec,54613
+8122,Vítkov,13274
