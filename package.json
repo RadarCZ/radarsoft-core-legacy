@@ -42,7 +42,7 @@
         "seedrandom": "^3.0.1",
         "sharp": "^0.25.4",
         "tmi.js": "^1.8.3",
-        "typeorm": "^0.2.24",
+        "typeorm": "^0.2.34",
         "winston": "^3.2.1"
     },
     "license": "GNU AGPLv3",
@@ -66,8 +66,6 @@
         "@typescript-eslint/parser": "^4.26.0",
         "eslint": "^7.28.0",
         "eslint-plugin-import": "^2.23.2",
-        "eslint-plugin-prefer-arrow": "^1.2.3",
-        "eslint-plugin-prefer-arrow-functions": "^3.0.1",
         "nodemon": "2.0.2",
         "ts-node": "^8.8.2",
         "tslint": "^6.1.1",
