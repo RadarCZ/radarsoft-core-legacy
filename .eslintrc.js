@@ -17,9 +17,7 @@ module.exports = {
         "sourceType": "module"
     },
     "plugins": [
-        "@typescript-eslint",
-		"@typescript-eslint/tslint",
-		"prefer-arrow"
+        "@typescript-eslint"
     ],
     "rules": {
         "@typescript-eslint/array-type": "off",
@@ -137,7 +135,6 @@ module.exports = {
                 "next": "return"
             }
         ],
-        "prefer-arrow/prefer-arrow-functions": "error",
         "quote-props": [
             "error",
             "always"
@@ -146,17 +143,6 @@ module.exports = {
         "spaced-comment": "error",
         "use-isnan": "error",
         "valid-typeof": "off",
-        "@typescript-eslint/tslint/config": [
-            "error",
-            {
-                "rules": {
-                    "jsdoc-format": true,
-                    "no-reference-import": true,
-                    "one-line": true,
-                    "whitespace": true
-                }
-            }
-        ],
         "import/no-named-as-default": [
             1
         ],
