@@ -8,12 +8,13 @@ export const getGcData: IAsyncRadarsoftHandler = async (req, res) => {
 	const gcResponse = await axios.get(url);
 
 	if (gcResponse.status === 200 || gcResponse.status === 300) {
+		//TODO: parse response (html unfortunately, thanks groundspeak, MAKE BASIC PROFILE API PUBLIC PLS)
 		const resultData = {
 			'icon': 'https://img.geocaching.com/user/square250/6632b799-e189-4ea1-9072-a2d48c03452f.png',
 			'name': u,
 			'site': 'geocaching',
-			'stat1': 75,
-			'stat2': 5,
+			'stat1': 145,
+			'stat2': 7,
 			'targetUrl': url
 		};
 
